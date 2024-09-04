@@ -2,8 +2,8 @@
 
 ## Team
 
-Name: Micro SD
-Group: МСПИН241
+Name: Micro SD<br/>
+Group: МСПИН241<br/>
 Members:
    * Abrosov Sergey  
    * Anisin Aleksandr  

@@ -28,7 +28,7 @@ Ensuring high data quality and availability is crucial for applications operatin
 
 Multistage data cleansing is a process where data undergoes a series of transformations to improve its quality. This involves removing duplicates, correcting errors, normalizing data, and other cleansing steps described below. This feature helps create accurate and consistent dataset.
 
-Detailed Description:
+**Detailed Description:**
 
 * **Removing Duplicates:** If the dataset contains multiple records for the same entity (e.g., customer data with the same email address), the ETL system should identify and suggest removing duplicate entries.  
 * **Correcting Errors:** Suppose a dataset contains misspelled words or incorrect data formats (e.g., phone numbers formatted inconsistently). The software could automatically correct these errors by referring to a predefined dictionary.  
@@ -74,7 +74,7 @@ Data quality analysis ensures that the data imported into the ETL process meets 
 
 The ETL service must be compatible with 2 formats: JSON and CSV. This ensures that the software can ingest data from various sources and export processed data in a format that other systems can easily consume.
 
-Detailed descriptions:
+**Detailed description:**
 
 * **Importing JSON:** The software should be able to parse complex JSON structures, including nested arrays and objects. For example, when importing a JSON file with customer orders, the ETL should extract and flatten relevant fields for easier processing.  
 * **Importing CSV:** The tool should handle different delimiters (commas, semicolons). It should also detect and handle header rows.  

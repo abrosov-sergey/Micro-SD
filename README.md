@@ -41,9 +41,8 @@ Data anonymization and masking involve modifying data to protect personally iden
 
 **Detailed Description:**
 
-* **Anonymization:** When the dataset contains customer PII such as names or phone numbers, the system anonymizes the data by removing or replacing sensitive information with pseudonyms or hashed values.  
+* **Anonymization:** When the dataset contains personal data (such as names or phone numbers), the system anonymizes the data by removing or replacing sensitive information with pseudonyms or hashed values.  
 * **Masking:** When the dataset needs to retain readability but hide sensitive information, the system masks the data, showing only partial values, such as displaying the last four digits of a credit card number.  
-* **Tokenization:** When sensitive data needs to be used for analysis without exposure, the system replaces the sensitive data with a token that refers to the original value, ensuring security if intercepted.
 
 ### 3. Data Merging
 
@@ -59,7 +58,6 @@ Metadata and protocol management involves storing and managing metadata in a str
 **Detailed Description:**
 
 * **Storing Metadata:** When a dataset is processed, the system generates and stores metadata in JSON-LD format that describes its schema, origin, and any transformations applied.  
-* **Automated Documentation:** When a dataset is processed, the system automatically generates a JSON-LD document that details the processing steps, data sources, and any transformations applied, ensuring proper documentation.
 
 ### 5. Data Quality
 

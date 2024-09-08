@@ -87,7 +87,7 @@ The ETL service must be compatible with two formats: JSON and CSV. This ensures 
    ETL service must recover automatically after a failure.
 
 2. **Maintainability**  
-   Updates and patches should be applied without causing significant downtime or requiring a full system restart.
+   Updates and patches should be applied without causing significant downtime.
 
 3. **Usability**  
    The system interface should be intuitive for users with varying technical backgrounds.

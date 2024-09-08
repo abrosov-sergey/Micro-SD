@@ -49,7 +49,8 @@ Data anonymization and masking involve modifying data to protect personally iden
 Data merging is the process of combining data from multiple sources into a unified dataset.
 
 **Detailed Description:**  
-When data comes from multiple sources, such as two .csv files, the system merges them by matching records based on a unique identifier. If conflicts arise, such as mismatching identifiers, the system returns an error or requests user intervention.
+
+* **Merging Data:** When data comes from multiple sources, such as two .csv files, the system merges them by matching records based on a unique identifier. If conflicts arise, such as mismatching identifiers, the system returns an error or requests user intervention.
 
 ### 4. Metadata and Protocol Management
 

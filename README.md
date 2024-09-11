@@ -80,6 +80,16 @@ The ETL service must be compatible with two formats: JSON and CSV. This ensures 
 * **Importing CSV:** When a CSV file is imported, the system detects different delimiters (such as commas or semicolons) and properly handles header rows for accurate data interpretation.  
 * **Exporting Data:** When the data has been processed, the system exports it in either JSON or CSV formats, based on the user’s selection.
 
+### 7. Logging and Audit Trails
+
+Logging and audit trails involve tracking the history of data processing steps to ensure transparency, traceability, and accountability.
+
+**Detailed Description:**
+
+* **Logging Data Processing:** When the system processes data (such as removing duplicates or correcting errors), it automatically logs each action, noting the type of transformation applied, the affected records, and the timestamp.
+* **Audit Trail for User Actions:** When a user performs manual actions (such as resolving a conflict during data merging or correcting flagged errors), the system records the action, along with the user’s identity and timestamp, for audit purposes.
+* **Viewing Logs:** When a user requests, the system displays a detailed log of all data transformations, showing a step-by-step breakdown of actions applied to the dataset for transparency and review.
+
 ## Constraints
 
 1. **Disaster Recovery**  

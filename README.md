@@ -9,7 +9,9 @@ Task №2: GitHub Repo
 Task №3: https://docs.google.com/presentation/d/1FlMaD3UYV3isiqQ4khlfJ4fg2SOmUeGApOc7ZTPYI9U/edit?usp=sharing
 
 Task №4: https://docs.google.com/document/d/1ilmZWZ4-yEUfUanzLw11iRW2gQ4b2FEnqN64QAGmVkU/edit?usp=sharing
-  
+
+Task №5: https://docs.google.com/presentation/d/1qOqScX0XhQLIA76nCZpglLcfXFSS5KNsb52CblAUeOU/edit?usp=sharing
+
 ## Team
 
 Name: Micro SD<br/>

@@ -1,0 +1,251 @@
+LINK TO WEEEK PAGE: https://app.weeek.net/ws/633468/document/18
+
+
+# User stories
+
+
+1. CLEANSING DATA:
+
+Imputing Missing Values Using Mean Imputation
+
+As an MLOps Engineer,I want the system to automatically replace missing numeric values with the mean of the available data,so that I can ensure my machine learning models are trained on complete datasets without introducing biases caused by missing values.
+
+Scenario:An MLOps Engineer is preparing data for model training but notices several missing values in a numeric field, such as "age" or "income". The ETL service automatically calculates the mean of the non-missing values and imputes this mean into the missing entries. The engineer proceeds with training the ML model on the complete dataset without risking model degradation due to missing data.
+
+Flagging and Removing Outliers in Data for ML training
+
+As a Data Scientist,I want the system to detect and flag outliers based on statistical methods like Z-score or IQR,so that I can choose to remove or handle them before training my machine learning models to avoid skewed results.
+
+Scenario:A Data Scientist is working with a large dataset containing numeric fields like "transaction amounts". The ETL system identifies extreme outliers using Z-score analysis, flags them, and suggests removal or correction. The scientist reviews the flagged records and decides whether to remove them or adjust them, ensuring the training data is robust and free of anomalies.
+
+Correcting Inconsistent Feature Scales for ML training
+
+As a Data Scientist,I want the system to automatically normalize or standardize feature values across the dataset,so that my machine learning algorithms perform optimally without being biased by scale differences in the input data.
+
+Scenario:A Data Scientist is preparing a dataset for a machine learning model that requires features to be on a similar scale (e.g., logistic regression or neural networks). The ETL service detects that some features are on different scales (e.g., "age" ranges from 0-100, while "income" ranges from 0-100,000) and normalizes or standardizes these features. This preprocessing step ensures that the model doesn't give undue importance to features based on their scale.
+
+Fixing Inconsistent Casing in Text Fields for ML training
+
+As an MLOps Engineer,I want to correct inconsistencies in text casing,so that I can avoid errors when performing text analysis and ensure uniformity in text data.
+
+Scenario:An MLOps Engineer encounters a dataset where customer reviews are written with inconsistent casing (e.g., "great product" vs. "GREAT PRODUCT"). The ETL service automatically corrects these inconsistencies by normalizing the text to lower case with proper capitalization where needed. This helps ensure that downstream NLP models perform well with consistent input.
+
+Automatically Handling Categorical Variables for ML Training
+
+As an MLOps Engineer,I want the system to automatically encode categorical variables using techniques like one-hot encoding or label encoding,so that I can directly use the processed data for machine learning model training without manual intervention.
+
+Scenario:An MLOps Engineer is preparing a dataset containing categorical features like "city" or "product type". The ETL service identifies these categorical fields and automatically applies one-hot encoding or label encoding, depending on the use case. The processed dataset is then ready for input into machine learning models, reducing the need for manual data preprocessing.
+
+2. Log﻿ging and Audit Trails
+
+Tracking Data Transformations for Model Reproducibility
+
+Name: Logging Data Transformations for Model ReproducibilityAs a Data Scientist,I want the ETL service to log all data transformations applied to the dataset,So that I can ensure my machine learning models are reproducible by using the exact same dataset transformations when retraining models in the future.
+
+Scenario:After a dataset undergoes a series of cleansing, merging, and transformation steps, the Data Scientist uses the logs to retrieve details on every transformation applied, such as normalization methods or data imputation strategies. When retraining or tuning a machine learning model, the Data Scientist can refer to these logs to ensure the dataset used remains consistent, enabling reproducibility of the model’s results.
+
+Viewing Historical Logs of Data Merging and Transformation
+
+Name: Viewing Historical Logs for Data Merging and TransformationAs a Data Engineer,I want the ETL service to allow me to view the full historical log of all data transformations and merges applied to a specific data module,So that I can perform in-depth analyses on how the data has evolved over time and identify any potential errors or inconsistencies in the process.
+
+Scenario:After completing several iterations of data processing, the Data Engineer accesses the historical logs to review the transformation steps applied during previous ETL runs. They can see a step-by-step breakdown of each data cleansing, merging, and anonymization process, along with detailed information about any user interventions or system-applied corrections. This helps them track the evolution of the dataset and catch any potential issues that might have been introduced in earlier stages.
+
+Searchable Logs for Fast Debugging of Data Pipeline Issues
+
+Name: Searchable Logs for Rapid Issue Resolution in Data PipelinesAs a Data Engineer,I want the ETL service to provide searchable logs of all data processing steps,So that I can quickly filter and locate specific transformations or user actions that might be causing issues in the data pipeline,Thereby enabling me to debug and resolve issues faster.
+
+Scenario:When the ETL pipeline fails or produces unexpected results in the output data, the Data Engineer can use the searchable logs to filter by specific actions (e.g., filtering only actions related to data normalization). This enables them to quickly identify the point of failure or deviation, assess the problem, and take corrective actions without needing to manually sift through the entire log history.
+
+Auditing Data Pipeline Changes
+
+Name: Monitoring Pipeline Modifications through Audit LogsAs a MLOps Engineer,I want the system to maintain audit logs for any changes made to the data pipeline,So that I can ensure that updates to data flows, configuration settings, or scripts are traceable and can be reverted if necessary.
+
+Scenario:During a deployment, the MLOps Engineer updates the configuration of the data pipeline to accommodate a new data source. The system records this change in the audit log, noting who made the update, when it was made, and what specific configurations were altered. This audit log allows the Engineer to track all pipeline modifications and ensures that any issues caused by the update can be traced back to the exact change, allowing for quick resolution.
+
+Investigating Data Quality Issues Using Logs
+
+Name: Using Logs to Investigate Data Quality IssuesAs a Data Engineer,I want to be able to trace back any data quality issues through detailed transformation logs,So that I can identify the root cause of data discrepancies and correct them.
+
+Scenario:After noticing discrepancies in the dataset during model training, the Data Engineer uses the transformation logs to investigate the issue. By reviewing each processing step logged in the system, the Engineer identifies a specific transformation that introduced the error and takes corrective action to resolve the issue. This ability to track and investigate data transformations ensures that data quality is maintained throughout the pipeline.
+
+3. Hashing sensitive info﻿rmation
+
+Automatic Feature Encoding for ML
+
+As a Data Scientist
+
+I want to automatically encode categorical features in my dataset using techniques like one-hot encoding or label encoding
+
+So that the processed data can be directly consumed by machine learning models that require numeric input, optimizing model performance and training time
+
+Pre-Hashing PII Before Data Sharing for Federated Learning
+
+As a MLOps Engineer
+
+I want to automatically hash personally identifiable information (PII) when preparing datasets for federated learning scenarios
+
+So that I can ensure that sensitive user data remains protected when collaborating across different institutions or systems during decentralized model training.
+
+Hashing Data for Anonymized Data Labeling in ML Pipelines
+
+As a Data Engineer
+
+I want to hash sensitive data fields before passing the dataset to human annotators or labeling systems
+
+So that I can ensure sensitive information is anonymized while still allowing labeled data to be used for training supervised machine learning models.
+
+Hashing Data for Secure Feature Engineering
+
+As a Data Engineer
+
+I want to hash sensitive data fields like credit card numbers or social security numbers before performing feature engineering tasks
+
+So that the hashed features can be securely used to derive aggregated statistics, ensuring that sensitive information is never exposed directly while training machine learning models.
+
+Automated Detection and Hashing of Sensitive Fields
+
+As a Data Engineer
+
+I want to automate the detection of sensitive fields such as Social Security Numbers, credit card numbers, or medical records within datasets
+
+So that the system automatically hashes this information, reducing manual effort and preventing human error in securing sensitive data.
+
+4. Show only partial values (phones, ﻿password, etc.)
+
+Securely Display Partial Phone Numbers
+
+Title: As a Data Engineer, I want to display only the last four digits of phone numbers in the dataset to protect user privacy while still allowing for verification.
+
+Description: When preparing a dataset for analysis, the Data Engineer needs to ensure sensitive information like phone numbers is partially hidden. The system should display only the last four digits of phone numbers, allowing the team to perform checks or communicate without exposing the full number.
+
+Acceptance Criteria:
+
+Phone numbers are displayed in the format ***-***-1234.
+
+The original phone number is accessible only through secure access protocols, ensuring full privacy.
+
+Data verification processes can still proceed without the need for full phone numbers.
+
+Masking Passwords in Audit Logs
+
+Title: As an MLOps Engineer, I want passwords in audit logs to be masked, showing only the last three characters, to ensure security and compliance.
+
+Description: While reviewing logs for user actions, the MLOps Engineer must ensure that sensitive information like passwords is not exposed. The system should mask passwords by showing only the last three characters, providing enough visibility for audit purposes without compromising security.
+
+Acceptance Criteria:
+
+Passwords are displayed as *****123 for security compliance.
+
+The system prevents unauthorized access to the full passwords in the logs.
+
+Users are alerted that password information is masked for security reasons.
+
+Partial Display of Credit Card Numbers
+
+Title: As an MLOps Engineer, I want to show only the last four digits of credit card numbers in transaction logs to enhance security and compliance.
+
+Description: In transaction logs, the MLOps Engineer must ensure that sensitive information like credit card numbers is not fully visible. The system should display only the last four digits (e.g., **** **** **** 1234) to maintain security while allowing for transaction identification.
+
+Acceptance Criteria:
+
+Credit card numbers are displayed in a masked format: **** **** **** 1234.
+
+The system logs the full credit card number securely, accessible only through authorized personnel.
+
+Compliance with payment data security standards (PCI DSS) is ensured.
+
+Anonymizing Data for Model Training
+
+Title: As a Data Scientist, I want to anonymize sensitive information in the training dataset to build a privacy-compliant machine learning model.
+
+Description: While preparing a dataset for training a machine learning model, the Data Scientist needs to ensure that sensitive data such as phone numbers and email addresses are anonymized. The system should display partial values, such as *****@example.com for emails, to protect user identities while maintaining the dataset's utility for model training.
+
+Acceptance Criteria:
+
+Email addresses are displayed as *****@example.com during data preprocessing.
+
+The anonymized data can still be used for training without losing its predictive value.
+
+Users are informed that the dataset has been anonymized to ensure compliance with data protection laws.
+
+5. Join/merge/filter ﻿data from multiple sources
+
+Model Training on Merged Data
+
+As a Data Scientist,I want to train machine learning models directly on the merged datasets,So that I can quickly evaluate the impact of different data sources on model performance and optimize my training pipeline.
+
+Filtering Data for Model Validation
+
+As a Data Scientist,I want to filter merged datasets based on specific criteria (like timeframes or demographic attributes),So that I can create validation datasets that are representative of the target population for more robust model evaluation.
+
+Historical Data Merging for Time Series Analysis
+
+As a Data Scientist,I want to merge historical datasets from various sources,So that I can analyze trends over time and build time series models to predict future outcomes.
+
+Anomaly Detection Across Merged Data Sources
+
+As a Data Engineer,I want to merge datasets and apply anomaly detection algorithms,So that I can identify outliers that may indicate data quality issues or important signals for machine learning models.
+
+6. Data import /export, be compatible with csv, json
+
+Integration with CI/CD Pipelines for ML Models
+
+As a Data Scientist,I want the ETL service to be compatible with CI/CD tools (like Jenkins or GitLab CI) for automated model deployment,So that I can streamline the process of deploying ML models using the latest processed data.Acceptance Criteria:
+
+Users can configure triggers in the CI/CD pipeline that initiate data processing or model retraining when new data is available.
+
+The system provides integration points for logging and tracking model deployment status within CI/CD tools.
+
+Interoperability with Data Visualization Tools
+
+As a Data Engineer,I want the ETL service to export data in formats compatible with data visualization tools (like Tableau or Power BI),So that I can create insightful dashboards and reports without manual data transformation steps.Acceptance Criteria:
+
+The system supports the export of processed data in formats that are readily importable into popular visualization tools.
+
+Users can select specific fields and aggregate data as needed during the export process.
+
+Automated Data Export to Third-Party Applications
+
+As a Data Scientist,I want the ETL service to automatically export processed datasets in CSV and JSON formats to third-party applications (such as BI tools and ML platforms),So that I can easily visualize and analyze the data without manual transfers.Acceptance Criteria:
+
+Users can configure export settings to send data directly to specified third-party applications.
+
+The system provides options for scheduling regular exports based on user-defined triggers.
+
+Seamless Integration with External Data Sources
+
+As a Data Engineer,I want the ETL service to easily connect to and import data from various external systems (like CRMs, databases, or cloud storage),So that I can consolidate data from multiple sources into a unified dataset for further processing without complex configurations.Acceptance Criteria:
+
+The system supports connections to popular external data sources (e.g., Salesforce, Google Cloud Storage).
+
+Users can authenticate and set up connections through a user-friendly interface.
+
+Cross-System Data Quality Assessment
+
+As a Data Engineer,I want the ETL service to assess and validate data quality against metrics from other systems (like databases or monitoring tools),So that I can ensure that the datasets being used for ML applications meet the required quality standards across all environments.Acceptance Criteria:
+
+The system can import quality metrics from other systems to compare against processed data.
+
+Users can configure alerts for any discrepancies between data quality metrics and defined thresholds.
+
+7. Performing data quality tests
+
+Duplicate Record Identification
+
+Name: Duplicate Record TestDescription:As an MLOps Engineer,I want the ETL service to detect and report duplicate records in my datasets,So that I can ensure that my training data is unique and reliable.Scenario: While preparing a dataset for a machine learning model, the MLOps Engineer initiates a quality check. The ETL service identifies and flags multiple duplicate entries based on a unique identifier (e.g., user IDs). The engineer reviews these duplicates and decides whether to remove or consolidate them, ensuring high-quality input data for the model.
+
+Critical Field Null Value Detection and Handling
+
+Name: Detection and Handling of Null Values in Critical FieldsDescription:As a Data Engineer,I want the ETL service to automatically flag records with null values in critical fields,So that I can ensure that essential data is complete before it is used for analysis or modeling.
+
+Detection of Invalid Phone Numbers Across Multiple Country Formats
+
+Name: Validation of International Phone Number Formats in Multi-Regional DatasetsDescription:As a Data Scientist,I want the ETL service to detect and flag invalid phone numbers across multiple country formats,So that I can ensure the data is accurate and usable for international applications, avoiding communication errors caused by incorrect phone numbers.
+
+Integration with CI/CD Pipelines for ML Models
+
+As a Data Scientist,I want the ETL service to be compatible with CI/CD tools (like Jenkins or GitLab CI) for automated model deployment,So that I can streamline the process of deploying ML models using the latest processed data.Acceptance Criteria:
+
+Users can configure triggers in the CI/CD pipeline that initiate data processing or model retraining when new data is available.
+
+The system provides integration points for logging and tracking model deployment status within CI/CD tools.

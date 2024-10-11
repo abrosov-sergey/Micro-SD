@@ -12,7 +12,7 @@
 
 [Class_candidates](https://github.com/abrosov-sergey/Micro-SD/blob/main/task5/Class_candidates.xlsx) </br>
 
-![](https://github.com/abrosov-sergey/Micro-SD/blob/main/task5/use_case.png) </br>
+![](https://github.com/abrosov-sergey/Micro-SD/blob/main/task5/Class_candidates.png) </br>
 
 [Domain model diagram](https://drive.google.com/file/d/1DAlZK-7jJq0N8UcUMmgkZN5GeMX-Krzb/view) </br>
 

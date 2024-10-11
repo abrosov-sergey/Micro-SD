@@ -11,7 +11,7 @@ Task №3: https://docs.google.com/presentation/d/1FlMaD3UYV3isiqQ4khlfJ4fg2SOmU
 Task №4: https://docs.google.com/document/d/1ilmZWZ4-yEUfUanzLw11iRW2gQ4b2FEnqN64QAGmVkU/edit?usp=sharing
 
 Presentation of Task №5: https://docs.google.com/presentation/d/1qOqScX0XhQLIA76nCZpglLcfXFSS5KNsb52CblAUeOU/edit?usp=sharing
-[README for Task №5](https://github.com/abrosov-sergey/Micro-SD/blob/main/task5/README.md) </br>
+README for Task №5: https://github.com/abrosov-sergey/Micro-SD/blob/main/task5/README.md
 
 Task №6: https://docs.google.com/presentation/d/1QtxlXbBMxnn4ROjWFLXMk7tnZJf2igzeF_HVogJMF5I/edit?usp=sharing
 

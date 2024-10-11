@@ -6,11 +6,11 @@
 [Video of presentation](https://drive.google.com/file/d/1H0gPB5rnI121EpBYOFPsXXLhuryPJY9f/view?usp=drive_link) </br>
 
 
-0:00 - Anisin Aleksandr
-1:00 - Pan Zhengwu
-2:06 - Abrosov Sergey
-3:25 - Malysh Igor
-5:06 - Lanin George
+0:00 - Anisin Aleksandr </br>
+1:00 - Pan Zhengwu </br>
+2:06 - Abrosov Sergey </br>
+3:25 - Malysh Igor </br>
+5:06 - Lanin George </br>
 
 
 [Presentation](https://github.com/abrosov-sergey/Micro-SD/blob/main/task5/_Micro%20SD%2C%20mETaL%2C%20task%205.pdf) </br>

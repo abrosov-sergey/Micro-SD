@@ -3,7 +3,7 @@
 
 ## Presentation
 
-![Video of presentation](https://drive.google.com/file/d/1H0gPB5rnI121EpBYOFPsXXLhuryPJY9f/view?usp=drive_link) </br>
+[Video of presentation](https://drive.google.com/file/d/1H0gPB5rnI121EpBYOFPsXXLhuryPJY9f/view?usp=drive_link) </br>
 
 [Presentation](https://github.com/abrosov-sergey/Micro-SD/blob/main/task5/_Micro%20SD%2C%20mETaL%2C%20task%205.pdf) </br>
 

@@ -1,15 +1,14 @@
 ## Task 5
 
 
-## Video of presentation
+## Presentation
 
-![](https://github.com/abrosov-sergey/Micro-SD/blob/main/task5/task5.mp4) </br>
-
-
+![Video of presentation](https://github.com/abrosov-sergey/Micro-SD/blob/main/task5/task5.mp4) </br>
 
 [Presentation](https://github.com/abrosov-sergey/Micro-SD/blob/main/task5/_Micro%20SD%2C%20mETaL%2C%20task%205.pdf) </br>
 
 
+## Sources
 
 [Class_candidates](https://github.com/abrosov-sergey/Micro-SD/blob/main/task5/Class_candidates.xlsx) </br>
 

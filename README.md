@@ -15,6 +15,8 @@ README for Task №5: https://github.com/abrosov-sergey/Micro-SD/blob/main/task5
 
 Task №6: https://docs.google.com/presentation/d/1QtxlXbBMxnn4ROjWFLXMk7tnZJf2igzeF_HVogJMF5I/edit?usp=sharing
 
+Task №7: https://docs.google.com/document/d/1lAQyUi0QRgM_REJKVpOWj-xhgOhObnBxBWDBlDgbzZE/edit?usp=sharing
+
 ## Team
 
 Name: Micro SD<br/>

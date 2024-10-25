@@ -11,6 +11,7 @@
 - **classCandidates.md** – potential classes needed for implementation.
 - **JTBD.png** – an image illustrating the "Jobs To Be Done" (JTBD) concept aimed at understanding users tasks.
 - **storyMap.jpg** – a user story map that represents stages of interaction and the user journey within the application.
+- **responsibilities.md** - file describing team, roles and contact info
 
 ## Team
 

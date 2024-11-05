@@ -47,8 +47,6 @@ The solution is divided into main subroutines:
 # Comparision with [Pan Zhengwu](https://github.com/abrosov-sergey/Micro-SD/tree/main/Tasks/task8/Pan%20Zhengwu/Problem%20B)
 
 
-# Comparison of Eight Queens Solutions
-
 | Criteria                                    | Main/Subroutine Solution                          | Pipes-and-Filters Solution                    | Explanation                                                                                                                                                                    |
 |---------------------------------------------|--------------------------------------------------|----------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **a) Ease of Changing Implementation**      | High                                             | Moderate                                      | The Main/Subroutine approach is modular, making it easier to adjust specific subroutines without affecting others. In the Pipes-and-Filters solution, each filter serves a specific function, allowing for straightforward modification, but changes must maintain data flow integrity. |

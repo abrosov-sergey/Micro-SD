@@ -59,7 +59,7 @@ python3 kwic.py
 ```
 
 
-# Comparision with [aleksandr-anisin](https://github.com/abrosov-sergey/Micro-SD/tree/main/Tasks/task8/aleksandr-anisin)
+# Comparision with [aleksandr-anisin](https://github.com/abrosov-sergey/Micro-SD/blob/main/Tasks/task8/aleksandr-anisin/t1-m2.py)
 
 | Criteria | My Main/Subroutine Solution | Teammate’s Main/Subroutine Solution| Explanation|
 |--|--|--|--|
@@ -73,4 +73,20 @@ Justifications
 
 As we use the same approach, there is not much to say.
 
-# Comparision with 
+# Comparision with [Malysh Igor](https://github.com/abrosov-sergey/Micro-SD/tree/main/Tasks/task8/Malysh%20Igor/Problem%20A)
+
+| Criteria                                    | Main/Subroutine Solution                    | Abstract Data Types Solution                  | Explanation                                                                                                                                                                    |
+|--|---|--|--|
+| **a) Ease of Changing Implementation**      | High                                        | Moderate                                      | The Main/Subroutine solution is broken into simple, sequential functions (e.g., `process_input`, `circular_shift`), making it easy to change specific steps without impacting other parts. The ADT solution requires modifying methods within class definitions, which may involve changes across interdependent classes if the design is tightly coupled. |
+| **b) Ease of Changing Data Representation** | Moderate                                    | High                                          | The ADT solution encapsulates data in classes (e.g., `KWICIndex`, `Word`, `Context`), so changing data representation is more straightforward as it only affects specific class properties and methods. Main/Subroutine may require adjustments across functions that handle the data directly, making changes more effortful. |
+| **c) Ease of Adding Functions**             | Moderate                                    | High                                          | ADT’s structure supports adding new methods to classes without affecting existing ones, providing flexibility. The Main/Subroutine solution is function-based and would require more restructuring to integrate new functionalities. |
+| **d) Performance**                          | High                                        | Moderate                                      | Main/Subroutine functions directly manipulate data, reducing the overhead associated with complex class interactions. The ADT solution may have additional overhead due to class instantiation and method calls, making it slightly less performant for large inputs. |
+| **e) Reusability Preference**               | Moderate                                    | High                                          | The ADT solution encapsulates related data and behaviors within reusable classes, making it ideal for reuse in similar indexing or text-processing applications. The Main/Subroutine solution is less reusable for diverse applications, as functions are tightly coupled to the KWIC process. |
+
+## Justifications
+
+- Ease of Changing Implementation: The Main/Subroutine solution isolates each step in a separate function, making it easier to adjust individual functions without impacting others. In ADT, modifying one class method could affect how other classes interact, potentially requiring more extensive adjustments.
+- Ease of Changing Data Representation: ADT encapsulates data within specific classes, making it easier to change how data is represented (e.g., using different data structures within classes) without affecting the entire program. Main/Subroutine handles data directly in functions, so changing representation might require more adjustments across multiple functions.
+- Ease of Adding Functions: The ADT approach provides high flexibility for adding new functionalities as new methods or classes without disrupting the existing structure. For Main/Subroutine, adding functions typically requires integrating them into an existing flow, which could involve additional restructuring.
+- Performance: Main/Subroutine performs well because each function works directly on data without extra layers. ADT may introduce slight overhead due to class instantiation and complex method interactions, especially if the data size grows.
+- Reusability: ADT structures are highly reusable, as classes can be repurposed in similar projects that require data encapsulation and modularity. Main/Subroutine is more specific to the KWIC flow, making it less adaptable for other projects without modification.

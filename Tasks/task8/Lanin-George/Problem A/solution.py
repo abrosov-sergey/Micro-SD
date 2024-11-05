@@ -37,7 +37,7 @@ def process_keyword(sender, line, keyword, result):
 def display_result(sender, result):
     print(*result)
 
-# Connect signals to functions
+
 line_signal.connect(process_line)
 
 

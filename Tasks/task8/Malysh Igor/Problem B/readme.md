@@ -41,3 +41,28 @@ The solution is divided into main subroutines:
 3. Run the program with the command:
    ```bash
    python3 problem_b.py
+
+
+
+# Comparision with [Pan Zhengwu](https://github.com/abrosov-sergey/Micro-SD/tree/main/Tasks/task8/Pan%20Zhengwu/Problem%20B)
+
+
+| Criteria                                    | Main/Subroutine Solution                          | Pipes-and-Filters Solution                    | Explanation                                                                                                                                                                    |
+|---------------------------------------------|--------------------------------------------------|----------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **a) Ease of Changing Implementation**      | High                                             | Moderate                                      | The Main/Subroutine approach is modular, making it easier to adjust specific subroutines without affecting others. In the Pipes-and-Filters solution, each filter serves a specific function, allowing for straightforward modification, but changes must maintain data flow integrity. |
+| **b) Ease of Changing Data Representation** | High                                             | Moderate                                      | The Main/Subroutine solution offers higher flexibility in changing the representation due to its encapsulated state. Both solutions represent queen positions using lists, but in the Pipes-and-Filters solution, any change in data structure requires updates across multiple filters. |
+| **c) Ease of Adding Functions**             | Moderate                                        | High                                          | In the Main/Subroutine method, adding new functions may require altering multiple related subroutines. The Pipes-and-Filters architecture facilitates the addition of new filters for functionality without disrupting existing ones. |
+| **d) Performance**                          | Moderate                                        | Moderate                                      | Both solutions utilize backtracking, which introduces inherent complexity. The Main/Subroutine method may have overhead due to function calls and checks, while the Pipes-and-Filters approach may have slight performance overhead from inter-filter data passing. |
+| **e) Reusability Preference**               | Moderate                                        | High                                          | The Main/Subroutine solution is more tailored to the specific 8Q problem, which may limit its adaptability to other contexts without substantial modification. The Pipes-and-Filters solution is highly reusable across different problems, as filters can be easily adapted for various constraint-based puzzles. |
+
+## Justifications
+
+- **Ease of Changing Implementation**: In the Main/Subroutine solution’s structure allows for easy changes within specific routines, providing high modularity. In the Pipes-and-Filters solution, each filter has a defined role, allowing for independent adjustments; however, the need to maintain a coherent data flow can complicate modifications.
+
+- **Ease of Changing Data Representation**: The Main/Subroutine approach allows for easy changes to the board state as it directly manipulates shared data. The Pipes-and-Filters solution, while still manageable, would require modifications across filters to ensure compatibility if the data representation changes.
+
+- **Ease of Adding Functions**: The Main/Subroutine approach may require more extensive modifications when adding new functionality, particularly if it impacts multiple routines. The architecture of the Pipes-and-Filters solution enables the addition of new features (e.g., filters for specific logging or additional validations) without altering existing filters.
+
+- **Performance**: Both solutions rely on backtracking, introducing similar levels of complexity. The Main/Subroutine method may face performance impacts due to the overhead of multiple function calls, while the Pipes-and-Filters method might incur slight overhead due to passing data through various filters.
+
+- **Reusability**: The Main/Subroutine solution is more specific to the 8Q problem, which may limit its applicability without significant redesign for other problems. The modular design of the Pipes-and-Filters solution makes it easy to adapt for different constraint-based challenges, making it highly reusable.

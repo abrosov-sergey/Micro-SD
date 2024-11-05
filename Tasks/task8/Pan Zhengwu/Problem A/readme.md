@@ -69,7 +69,7 @@ python3 kwic.py
 | **d) Performance**                          | Moderate | Moderate | Both solution passes data through several modular steps, introducing slight overhead|
 | **e) Reusability Preference**               | High | High | Both solution’s clear modular separation of steps (input processing, shifting, sorting) makes it easier to adapt to similar text processing tasks. |
 
-Justifications
+## Justifications
 
 As we use the same approach, there is not much to say.
 

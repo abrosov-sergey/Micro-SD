@@ -47,12 +47,9 @@ async def process_config(file: UploadFile):
 
         # 5. Передаём конфигурацию в третий микросервис в формате JSON
         session_request_payload = {
-            "config": {
-                "file_name": config["file_name"],
-                "action": config["action"],
-                "columns": config["columns"]
-            },
-            "source": "data_source_1"  # Замените на реальный источник данных
+            "file_name": config["file_name"],
+            "action": config["action"],
+            "columns": config["columns"]
         }
 
         session_service = requests.post(SESSION_SERVICE_URL, json=session_request_payload)
@@ -68,4 +65,3 @@ async def process_config(file: UploadFile):
         raise HTTPException(status_code=400, detail=f"Ошибка в синтаксисе YAML: {str(e)}")
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Неизвестная ошибка: {str(e)}")
-    

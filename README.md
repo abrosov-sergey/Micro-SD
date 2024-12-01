@@ -6,9 +6,13 @@ Our team chose FastAPI and Python for its efficiency, scalability, and developer
 
 All our microservices are stateless.
 
-Hackaton files are located in **kubernetes_app** folder. First part of the hackaton are located in **/hackaton/task1/**.
+Hackaton files are located in [**kubernetes_app**](https://github.com/abrosov-sergey/Micro-SD/tree/main/kubernetes_app) folder. First part of the hackaton are located in [**/hackaton/task1/**](https://github.com/abrosov-sergey/Micro-SD/tree/main/hackaton/task1).
 
 LLM prompts are here:
+
+
+
+
 
 ## Navigation
 

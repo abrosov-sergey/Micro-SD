@@ -15,8 +15,7 @@ LLM prompts are here:
 - [Lanin George](https://github.com/abrosov-sergey/Micro-SD/blob/main/kubernetes_app/email_service/prompt.md)
 - [Malysh Igor](https://github.com/abrosov-sergey/Micro-SD/blob/main/kubernetes_app/dataprocessing/chatgpt_prompt.txt)
 
-
-
+[Link to the video](https://disk.yandex.com/client/disk/ASD?idApp=client&dialog=slider&idDialog=/disk/ASD/file.webm)
 
 ## Navigation
 

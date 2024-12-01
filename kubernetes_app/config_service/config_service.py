@@ -6,7 +6,7 @@ app = FastAPI()
 
 # Настройки API — используем имена контейнеров
 DB_SERVICE_URL = "http://db-service:8000"
-SESSION_SERVICE_URL = "http://session-service:8080/config"
+SESSION_SERVICE_URL = "http://session-service:8080/sessions"
 
 @app.post("/process-config/")
 async def process_config(file: UploadFile):
@@ -46,16 +46,23 @@ async def process_config(file: UploadFile):
             raise HTTPException(status_code=500, detail="Ошибка при загрузке файла в DB")
 
         # 5. Передаём конфигурацию в третий микросервис в формате JSON
-        third_service_response = requests.post(SESSION_SERVICE_URL, json={
-            "file_name": config["file_name"],
-            "action": config["action"],
-            "columns": config["columns"]
-        })
+        session_request_payload = {
+            "config": {
+                "file_name": config["file_name"],
+                "action": config["action"],
+                "columns": config["columns"]
+            },
+            "source": "data_source_1"  # Замените на реальный источник данных
+        }
 
-        if third_service_response.status_code != 200:
-            raise HTTPException(status_code=500, detail="Ошибка при отправке конфигурации в Session")
+        third_service_response = requests.post(SESSION_SERVICE_URL, json=session_request_payload)
 
-        return {"message": "Конфигурация успешно обработана и отправлена"}
+        if third_service_response.status_code == 201:
+            return {"message": "Сессия успешно создана"}
+        elif third_service_response.status_code == 400:
+            raise HTTPException(status_code=400, detail="Неверные данные запроса в Session")
+        else:
+            raise HTTPException(status_code=500, detail="Ошибка при создании сессии в Session")
 
     except yaml.YAMLError as e:
         raise HTTPException(status_code=400, detail=f"Ошибка в синтаксисе YAML: {str(e)}")

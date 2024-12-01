@@ -55,11 +55,11 @@ async def process_config(file: UploadFile):
             "source": "data_source_1"  # Замените на реальный источник данных
         }
 
-        third_service_response = requests.post(SESSION_SERVICE_URL, json=session_request_payload)
+        session_service = requests.post(SESSION_SERVICE_URL, json=session_request_payload)
 
-        if third_service_response.status_code == 201:
+        if session_service.status_code == 201:
             return {"message": "Сессия успешно создана"}
-        elif third_service_response.status_code == 400:
+        elif session_service.status_code == 400:
             raise HTTPException(status_code=400, detail="Неверные данные запроса в Session")
         else:
             raise HTTPException(status_code=500, detail="Ошибка при создании сессии в Session")

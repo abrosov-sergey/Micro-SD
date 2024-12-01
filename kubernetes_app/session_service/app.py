@@ -1,7 +1,9 @@
+import uvicorn
 from fastapi import FastAPI, HTTPException, Path, Body
 from pydantic import BaseModel
 from typing import Optional, Dict
 from enum import Enum 
+
 
 app = FastAPI(
     title="mETaL - OpenAPI 3.0",
@@ -88,3 +90,7 @@ async def update_session_status(
         raise HTTPException(status_code=404, detail="Session not found")
     session.status = status_update.status
     return session.status
+
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8080)

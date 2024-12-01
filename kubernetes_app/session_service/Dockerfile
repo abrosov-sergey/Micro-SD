@@ -1,18 +1,19 @@
-# Используем официальный базовый образ Python
-FROM python:3.10-slim
+FROM python:3.10.14-bookworm
 
-# Устанавливаем рабочую директорию внутри контейнера
-WORKDIR /app
+# set work directory
+WORKDIR /code
 
-# Копируем файлы приложения в контейнер
-COPY . /app
 
-# Устанавливаем зависимости
-RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir -r requirements.txt
+# install dependencies
+RUN pip3 install --upgrade pip
+COPY ./requirements.txt /code/requirements.txt
+RUN pip3 install -r requirements.txt
 
-# Открываем порт для приложения
+# copy project
+COPY . /code/
+
+COPY ./launch_app_w_migrations.sh /launch_app_w_migrations.sh
+
 EXPOSE 8080
 
-# Команда для запуска приложения
-CMD ["uvicorn", "session_service:app", "--host", "0.0.0.0", "--port", "8080"]
+ENTRYPOINT ["sh", "/launch_app_w_migrations.sh"]

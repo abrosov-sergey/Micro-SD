@@ -1,0 +1,5 @@
+file_name: 6a9877ce-fd3c-4d45-afb5-ea01522a28c8_test.csv
+action: transform
+columns:
+  - column1
+  - column2

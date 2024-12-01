@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dataprocessing-app
+  labels:
+    app: dataprocessing
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dataprocessing
+  template:
+    metadata:
+      labels:
+        app: dataprocessing
+    spec:
+      containers:
+      - name: dataprocessing-container
+        image: awesomecosmonaut/dataprocessing-app:latest
+        ports:
+        - containerPort: 8080

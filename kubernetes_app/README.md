@@ -5,7 +5,7 @@
 2.
 
 ```
-docker build -t fastapi-app:latest .
+docker build -t <ваш логин в dockerhub>/fastapi-app:latest .
 ```
 3.  
 

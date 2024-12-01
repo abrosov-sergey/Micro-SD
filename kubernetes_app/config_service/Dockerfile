@@ -15,4 +15,4 @@ pip install --no-cache-dir -r requirements.txt
 EXPOSE 8001
 
 # Команда запуска приложения
-CMD ["uvicorn", "config_service:app", "--host", "0.0.0.0", "--port", "8001"]
+CMD ["uvicorn", "config_service:app", "--host", "0.0.0.0", "--port", "8080"]

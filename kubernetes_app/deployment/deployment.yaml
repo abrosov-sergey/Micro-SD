@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: app
+  name: dataprocessing-app
   labels:
-    app: fastapi
+    app: dataprocessing
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      app: fastapi
+      app: dataprocessing
   template:
     metadata:
       labels:
-        app: fastapi
+        app: dataprocessing
     spec:
       containers:
-      - name: fastapi-container
-        image: awesomecosmonaut/fastapi-app:latest
+      - name: dataprocessing-container
+        image: awesomecosmonaut/dataprocessing-app:latest
         ports:
-        - containerPort: 8000
+        - containerPort: 8080

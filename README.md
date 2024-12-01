@@ -1,14 +1,6 @@
 # mETaL
 
-## Hackaton Info
-
-Our team chose FastAPI and Python for its efficiency, scalability, and developer-friendly design. FastAPI offers asynchronous request handling for high performance, automatic Swagger documentation, and robust type-checking using Python’s type hints.
-
-All our microservices are stateless.
-
-LLM prompts are here:
-
-## avigation
+## Navigation
 
 - **businessRequirements.md** – a document outlining the business requirements and goals of the project, focusing on customer needs and project justification.
 - **glossary.md** – a glossary explaining key terms and abbreviations used in the project, facilitating the understanding of specific terminology.

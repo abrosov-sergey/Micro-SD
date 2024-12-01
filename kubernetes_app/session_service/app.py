@@ -6,7 +6,7 @@ from enum import Enum
 app = FastAPI(
     title="mETaL - OpenAPI 3.0",
     description="This is one of mETaL's microservices based on the OpenAPI 3.0 specification.",
-    version="1.0.0"
+    version="1.0.0",
 )
 
 # Models for request and response schemas

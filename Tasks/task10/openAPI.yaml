@@ -1,0 +1,1152 @@
+openapi: 3.0.3
+info:
+  version: 1.0.0
+  title: mETaL - OpenAPI 3.0
+  description: |-
+    This is a on of mETaL's micriservices based on the OpenAPI 3.0 specification.
+
+servers:
+  - url: https://api.example.com/v1
+    description: Production server
+
+tags:
+  - name: DataProcessor
+    description: Управление пайплайнами обработки данных
+  - name: DataProcessorSession
+    description: Управление сессиями обработки данных
+  - name: Session notifications
+    description: Session notifications endpoints
+  - name: Config
+    description: Working with config to manipulate data
+  - name: Schema
+    description: Управление схемой базы данных
+  - name: Column
+    description: Управление колонками в схеме
+  - name: DBCredential
+    description: Управление доступом к базе данных
+
+paths:
+
+  /sessions:
+    post:
+      tags:
+        - Session
+      summary: Создание новой сессии
+      description: Создаёт новую сессию обработки данных с использованием конфигурации и источников данных.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SessionCreateRequest'
+      responses:
+        '201':
+          description: Сессия успешно создана.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Session'
+        '400':
+          description: Неверные данные запроса.
+        '500':
+          description: Ошибка сервера.
+
+  /sessions/{sessionId}:
+    get:
+      tags:
+        - Session
+      summary: Получить информацию о сессии
+      description: Возвращает информацию о конкретной сессии, включая её текущий статус и параметры.
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          description: Уникальный идентификатор сессии.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Информация о сессии.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Session'
+        '404':
+          description: Сессия не найдена.
+        '500':
+          description: Ошибка сервера.
+
+    delete:
+      tags:
+        - Session
+      summary: Удалить сессию
+      description: Удаляет указанную сессию и связанные с ней данные.
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          description: Уникальный идентификатор сессии.
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Сессия успешно удалена.
+        '404':
+          description: Сессия не найдена.
+        '500':
+          description: Ошибка сервера.
+
+  /sessions/{sessionId}/status:
+    get:
+      tags:
+        - Session
+      summary: Получить статус обработки сессии
+      description: Возвращает текущий статус обработки сессии.
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          description: Уникальный идентификатор сессии.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Текущий статус обработки.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionStatus'
+        '404':
+          description: Сессия не найдена.
+        '500':
+          description: Ошибка сервера.
+
+    put:
+      tags:
+        - Session
+      summary: Обновить статус сессии
+      description: Обновляет статус обработки указанной сессии.
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          description: Уникальный идентификатор сессии.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SessionStatusUpdate'
+      responses:
+        '200':
+          description: Статус сессии успешно обновлён.
+        '400':
+          description: Неверные данные запроса.
+        '404':
+          description: Сессия не найдена.
+        '500':
+          description: Ошибка сервера.
+
+  /schemas:
+    get:
+      tags:
+        - Schema
+      summary: Получить список схем
+      description: Возвращает все доступные схемы базы данных.
+      responses:
+        '200':
+          description: Список схем успешно получен
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Schema'
+        '500':
+          description: Ошибка сервера
+
+    post:
+      tags:
+        - Schema
+      summary: Создать новую схему
+      description: Создаёт новую схему в базе данных.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Schema'
+      responses:
+        '201':
+          description: Схема успешно создана
+        '400':
+          description: Некорректные данные
+        '500':
+          description: Ошибка сервера
+
+  /schemas/{schemaId}:
+    get:
+      tags:
+        - Schema
+      summary: Получить схему по ID
+      description: Возвращает информацию о конкретной схеме.
+      parameters:
+        - name: schemaId
+          in: path
+          required: true
+          description: Идентификатор схемы
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Информация о схеме
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Schema'
+        '404':
+          description: Схема не найдена
+        '500':
+          description: Ошибка сервера
+
+    delete:
+      tags:
+        - Schema
+      summary: Удалить схему
+      description: Удаляет указанную схему из базы данных.
+      parameters:
+        - name: schemaId
+          in: path
+          required: true
+          description: Идентификатор схемы
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Схема успешно удалена
+        '404':
+          description: Схема не найдена
+        '500':
+          description: Ошибка сервера
+
+  /schemas/{schemaId}/columns:
+    get:
+      tags:
+        - Column
+      summary: Получить все колонки схемы
+      description: Возвращает список всех колонок в указанной схеме.
+      parameters:
+        - name: schemaId
+          in: path
+          required: true
+          description: Идентификатор схемы
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Список колонок
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Column'
+        '404':
+          description: Схема не найдена
+        '500':
+          description: Ошибка сервера
+
+    post:
+      tags:
+        - Column
+      summary: Добавить колонку в схему
+      description: Создаёт новую колонку в указанной схеме.
+      parameters:
+        - name: schemaId
+          in: path
+          required: true
+          description: Идентификатор схемы
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Column'
+      responses:
+        '201':
+          description: Колонка успешно добавлена
+        '400':
+          description: Некорректные данные
+        '404':
+          description: Схема не найдена
+        '500':
+          description: Ошибка сервера
+
+  /schemas/{schemaId}/columns/{columnId}:
+    get:
+      tags:
+        - Column
+      summary: Получить информацию о колонке
+      description: Возвращает информацию о конкретной колонке в схеме.
+      parameters:
+        - name: schemaId
+          in: path
+          required: true
+          description: Идентификатор схемы
+          schema:
+            type: string
+        - name: columnId
+          in: path
+          required: true
+          description: Идентификатор колонки
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Информация о колонке
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Column'
+        '404':
+          description: Колонка не найдена
+        '500':
+          description: Ошибка сервера
+
+    delete:
+      tags:
+        - Column
+      summary: Удалить колонку
+      description: Удаляет указанную колонку из схемы.
+      parameters:
+        - name: schemaId
+          in: path
+          required: true
+          description: Идентификатор схемы
+          schema:
+            type: string
+        - name: columnId
+          in: path
+          required: true
+          description: Идентификатор колонки
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Колонка успешно удалена
+        '404':
+          description: Колонка не найдена
+        '500':
+          description: Ошибка сервера
+
+  /credentials:
+    get:
+      tags:
+        - DBCredential
+      summary: Получить список доступов
+      description: Возвращает список всех активных доступов к базе данных.
+      responses:
+        '200':
+          description: Список доступов
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DBCredential'
+        '500':
+          description: Ошибка сервера
+
+  /data-processors/steps:
+    post:
+      tags:
+        - DataProcessor
+      summary: Добавление шага в DataProcessor
+      description: Добавляет новый шаг в указанный DataProcessor.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                stepName:
+                  type: string
+                  description: Название шага.
+                stepType:
+                  type: string
+                  description: Тип шага (например, Transform, Anonymize, Merge, Cleanse, CheckQuality).
+                  enum:
+                  - Transform
+                  - Anonymize
+                  - Merge
+                  - Cleanse
+                  - CheckQuality
+                nextStepID:
+                  type: string
+                  description: Идентификатор следующего шага в пайплайне.
+                prevStepID:
+                  type: string
+                  description: Идентификатор предыдущего шага в пайплайне.
+                dataSource:
+                  type: string
+                  description: Источник данных для шага.
+                dataDest:
+                  type: string
+                  description: Назначение данных для шага.
+
+      responses:
+        '201':
+          description: Шаг успешно добавлен.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  stepId:
+                    type: string
+                    description: Идентификатор нового шага.
+          
+        '400':
+          description: Неверные данные запроса.
+        '500':
+          description: Ошибка при выполнении запроса.
+          
+          
+    get:
+      tags:
+        - DataProcessor
+      summary: Получение всех шагов DataProcessor
+      description: Возвращает список всех шагов для указанного DataProcessor.
+      responses:
+        '200':
+          description: Успешный ответ с данными.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                  
+                    id:
+                      type: string
+                      description: id шага.
+                    stepName:
+                      type: string
+                      description: Название шага.
+                    stepType:
+                      type: string
+                      description: Тип шага (например, Transform, Anonymize, Merge, Cleanse, CheckQuality).
+                      enum:
+                      - Transform
+                      - Anonymize
+                      - Merge
+                      - Cleanse
+                      - CheckQuality
+                    nextStepID:
+                      type: string
+                      description: Идентификатор следующего шага в пайплайне.
+                    prevStepID:
+                      type: string
+                      description: Идентификатор предыдущего шага в пайплайне.
+                    dataSource:
+                      type: string
+                      description: Источник данных для шага.
+                    dataDest:
+                      type: string
+                      description: Назначение данных для шага.
+        '400':
+          description: Неверные данные запроса.
+        '500':
+          description: Ошибка при выполнении запроса.
+          
+          
+  /data-processors/steps/{stepId}:
+    delete:
+      tags:
+        - DataProcessor
+      summary: Удаление шага из DataProcessor
+      description: Удаляет шаг из указанного DataProcessor.
+      parameters:
+        - in: path
+          name: stepId
+          required: true
+          schema:
+            type: string
+          description: Идентификатор шага.
+      responses:
+        '204':
+          description: Шаг успешно удален.
+        '404':
+          description: DataProcessor или шаг не найден.
+        '500':
+          description: Ошибка при выполнении запроса.
+
+  /data-processors/steps/{stepId}/stop:
+    post:
+      tags:
+        - DataProcessor
+      summary: Остановка шага
+      description: Останавливает выполнение указанного шага.
+      parameters:
+        - in: path
+          name: stepId
+          required: true
+          schema:
+            type: string
+          description: Идентификатор шага.
+      responses:
+        '200':
+          description: Шаг успешно остановлен.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: Новый статус шага.
+        
+        '400':
+          description: Неверные данные запроса.
+        '500':
+          description: Ошибка при выполнении запроса.
+          
+          
+  /data-processors/steps/{stepId}/restart:
+    post:
+      tags:
+        - DataProcessor
+      summary: Повторный запуск шага
+      description: Перезапускает указанный шаг.
+      parameters:
+        - in: path
+          name: stepId
+          required: true
+          schema:
+            type: string
+          description: Идентификатор шага.
+      responses:
+        '200':
+          description: Шаг успешно перезапущен.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: Новый статус шага.
+        
+        '400':
+          description: Неверные данные запроса.
+        '500':
+          description: Ошибка при выполнении запроса.
+          
+          
+  /data-processor-sessions/{sessionId}/start:
+    post:
+      tags:
+        - DataProcessorSession
+      summary: Запуск DataProcessorSession
+      description: Запускает указанную сессию DataProcessor.
+      parameters:
+        - in: path
+          name: sessionId
+          required: true
+          schema:
+            type: string
+          description: Идентификатор сессии.
+      responses:
+        '200':
+          description: Сессия успешно запущена.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: Новый статус сессии.
+        
+        '400':
+          description: Неверные данные запроса.
+        '500':
+          description: Ошибка при выполнении запроса.
+          
+
+  /data-processor-sessions/{sessionId}/stop:
+    post:
+      tags:
+        - DataProcessorSession
+      summary: Остановка DataProcessorSession
+      description: Останавливает указанную сессию DataProcessor.
+      parameters:
+        - in: path
+          name: sessionId
+          required: true
+          schema:
+            type: string
+          description: Идентификатор сессии.
+      responses:
+        '200':
+          description: Сессия успешно остановлена.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: Новый статус сессии.
+        
+        '400':
+          description: Неверные данные запроса.
+        '500':
+          description: Ошибка при выполнении запроса.
+          
+
+  /data-processor-sessions/{sessionId}/restart:
+    post:
+      tags:
+        - DataProcessorSession
+      summary: Перезапуск DataProcessorSession
+      description: Перезапускает указанную сессию DataProcessor.
+      parameters:
+        - in: path
+          name: sessionId
+          required: true
+          schema:
+            type: string
+          description: Идентификатор сессии.
+      responses:
+        '200':
+          description: Сессия успешно перезапущена.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: Новый статус сессии.
+        
+        '400':
+          description: Неверные данные запроса.
+        '500':
+          description: Ошибка при выполнении запроса.
+          
+
+  # Создание DataProcessorSession
+  /data-processor-sessions:
+    post:
+      tags:
+        - DataProcessorSession
+      summary: Создать новую сессию обработки данных
+      description: Создание новой сессии для обработки данных.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Название DataProcessorSession.
+                steps:
+                  type: array
+                  description: Список шагов для данного DataProcessorSession.
+                  items:
+                    type: object
+                    properties:
+                      stepName:
+                        type: string
+                        description: Название шага.
+                      stepType:
+                        type: string
+                        description: Тип шага (например, Transform, Anonymize, Merge, Cleanse, CheckQuality).
+                        enum:
+                        - Transform
+                        - Anonymize
+                        - Merge
+                        - Cleanse
+                        - CheckQuality
+                      nextStepID:
+                        type: string
+                        description: Идентификатор следующего шага в пайплайне.
+                      prevStepID:
+                        type: string
+                        description: Идентификатор предыдущего шага в пайплайне.
+                      dataSource:
+                        type: string
+                        description: Источник данных для шага.
+                      dataDest:
+                        type: string
+                        description: Назначение данных для шага.
+      responses:
+        '201':
+          description: Сессия создана.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Идентификатор созданной сессии.
+        '400':
+          description: Неверные данные запроса.
+        '500':
+          description: Ошибка при выполнении запроса.
+  
+  # Получить информацию о сессии DataProcessor
+  /data-processor-sessions/{sessionId}:
+    get:
+      tags:
+        - DataProcessorSession
+      summary: Получить информацию о сессии DataProcessor
+      description: Получить информацию о текущем статусе сессии обработки данных.
+      parameters:
+        - in: path
+          name: sessionId
+          required: true
+          description: Идентификатор сессии DataProcessor.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Информация о сессии.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: id DataProcessorSession.
+                  
+                  name:
+                    type: string
+                    description: Название DataProcessorSession.
+                  steps:
+                    type: array
+                    description: Список шагов для данного DataProcessorSession.
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: id step.
+                        
+                        stepName:
+                          type: string
+                          description: Название шага.
+                        stepType:
+                          type: string
+                          description: Тип шага (например, Transform, Anonymize, Merge, Cleanse, CheckQuality).
+                          enum:
+                          - Transform
+                          - Anonymize
+                          - Merge
+                          - Cleanse
+                          - CheckQuality
+                        nextStepID:
+                          type: string
+                          description: Идентификатор следующего шага в пайплайне.
+                        prevStepID:
+                          type: string
+                          description: Идентификатор предыдущего шага в пайплайне.
+                        dataSource:
+                          type: string
+                          description: Источник данных для шага.
+                        dataDest:
+                          type: string
+                          description: Назначение данных для шага.
+        '404':
+          description: Сессия не найдена.
+        '500':
+          description: Ошибка при выполнении запроса.
+  
+    delete:
+      tags:
+        - DataProcessorSession
+      summary: Удалить информацию о сессии DataProcessor 
+      description: Удалить  информаацию о сессии обработки данных.
+      parameters:
+        - in: path
+          name: sessionId
+          required: true
+          description: Идентификатор сессии DataProcessor.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Удаление сессии.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Идентификатор сессии.
+        '404':
+          description: Сессия не найдена.
+        '500':
+          description: Ошибка при выполнении запроса.
+          
+  # Вебхук для завершения шага
+  /data-processor-sessions/step_end_webhook/{stepId}:
+    post:
+      tags:
+        - DataProcessorSession
+      summary: Вебхук о завершении шага
+      description: Получение уведомления о завершении шага в сессии обработки данных.
+      parameters:
+        - in: path
+          name: stepId
+          required: true
+          description: Идентификатор сессии DataProcessor.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                stepId:
+                  type: string
+                  description: Идентификатор завершенного шага.
+                status:
+                  type: string
+                  enum: [Success, Error]
+                  description: Статус завершенного шага.
+      responses:
+        '200':
+          description: Уведомление получено.
+        '400':
+          description: Неверные данные запроса.
+        '500':
+          description: Ошибка при выполнении запроса.
+
+
+  /config:
+    get:
+      tags:
+      - Config
+      summary: Get all Config instances
+      operationId: getAllConfigs
+      responses:
+        '200':
+          description: List of all Config instances
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Config'
+        '401':
+          description: Missing Authorization Token
+        '403':
+          description: Access denied
+    post:
+      tags:
+      - Config
+      summary: Create a new Config instance
+      operationId: createConfig
+      requestBody:
+        required: true
+        content:
+          text/yaml:
+            schema:
+              $ref: '#/components/schemas/CreateConfig'
+      responses:
+        '201':
+          description: Config instance created successfully
+        '401':
+          description: Missing Authorization Token
+        '403':
+          description: Access denied
+
+  /config/{id}:
+    get:
+      tags:
+      - Config
+      summary: Get a specific Config instance by ID
+      operationId: getConfigById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Config instance retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Config'
+        '401':
+          description: Missing Authorization Token
+        '403':
+          description: Access denied
+        '404':
+          description: Config instance not found
+  
+  /config/{config_id}/validation_status:
+    get:
+      tags:
+      - Config
+      summary: Get current validation status of specific config
+      operationId: getConfigValidationStatusById
+      parameters:
+        - name: config_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Config validation status
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValStatusSchema"
+        '401':
+          description: Missing Authorization Token
+        '403':
+          description: Access denied
+        '404':
+          description: Config instance not found
+
+  /session/{session_id}:
+    post:
+      tags:
+        - Session notifications
+      summary: Notifies user about new status of the session
+      parameters:
+        - name: session_id
+          required: true
+          in: path
+          description: Identifier of the session
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewSessionStatusSchema"
+      responses:
+        '200':
+          description: Successful notification
+        '422':
+          description: Notification could not be sended
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - message
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+
+components:
+  schemas:
+  
+    Schema:
+      type: object
+      properties:
+        schemaId:
+          type: string
+          description: Уникальный идентификатор схемы
+        schemaName:
+          type: string
+          description: Название схемы
+        columns:
+          type: array
+          items:
+            $ref: '#/components/schemas/Column'
+
+    Column:
+      type: object
+      properties:
+        columnId:
+          type: string
+          description: Уникальный идентификатор колонки
+        columnName:
+          type: string
+          description: Название колонки
+        dataType:
+          type: string
+          description: Тип данных колонки
+          enum:
+            - Integer
+            - Float
+            - String
+        columnData:
+          type: string
+          description: Данные в колонке
+
+    DBCredential:
+      type: object
+      properties:
+        credentialId:
+          type: string
+          description: Уникальный идентификатор доступа
+        approvedUserId:
+          type: string
+          description: Идентификатор пользователя
+        expirationDate:
+          type: string
+          format: date-time
+          description: Дата истечения доступа
+          
+    ValStatusSchema:
+      type: object
+      properties:
+        name:
+           $ref: '#/components/schemas/ConfigValidationStatus'
+          
+        status_id:
+          type: string
+          format: uuid
+      
+    CreateConfig:
+      type: object
+      properties:
+        rawConfig:
+          type: string
+    Config:
+      type: object
+      properties:
+        configID:
+          type: string
+          format: uuid
+        rawConfig:
+          type: string
+        validationStatus:
+          $ref: '#/components/schemas/ConfigValidationStatus'
+        steps:
+          type: array
+          items:
+            $ref: '#/components/schemas/Step'
+
+    ConfigValidationStatus:
+      type: string
+      enum:
+        - Initial
+        - Ready
+        - Running
+        - Success
+        - Error
+
+    Step:
+      type: object
+      properties:
+        stepID:
+          type: string
+          format: uuid
+        stepName:
+          type: string
+          example: "TransformAlongCountry"
+        stepType:
+          $ref: '#/components/schemas/StepType'
+        stepDescription:
+          type: string
+        nextStepId:
+          nullable: true
+          type: string
+          format: uuid
+        prevStepId:
+          nullable: true
+          type: string
+          format: uuid
+        
+    
+    StepType:
+      type: string
+      enum:
+        - Transform
+        - Anonymize
+        - Merge
+        - Cleanse
+        - CheckQuality
+        
+    NewSessionStatusSchema:
+      description: User info for username change
+      type: object
+      required:
+        - email
+        - new_status_id
+      properties:
+        email:
+          description: Email of user
+          type: string
+          example: example@mail.ru
+        new_status_id:
+          description: New status of the session's execution
+          type: string
+          enum:
+            - Initial
+            - Ready
+            - Running
+            - Success
+            - Error
+        
+    Session:
+      type: object
+      properties:
+        sessionId:
+          type: string
+          description: Уникальный идентификатор сессии.
+        config:
+          $ref: '#/components/schemas/Config'
+        processingParameters:
+          type: object
+          additionalProperties:
+            type: string
+          description: Параметры обработки данных, связанные с сессией.
+        status:
+          $ref: '#/components/schemas/SessionStatus'
+
+    SessionCreateRequest:
+      type: object
+      properties:
+        configId:
+          type: string
+          description: Идентификатор конфигурации для сессии.
+        processingParameters:
+          type: object
+          additionalProperties:
+            type: string
+          description: Параметры обработки данных для сессии.
+
+    SessionStatus:
+      type: string
+      enum:
+        - Initial
+        - Ready
+        - Running
+        - Success
+        - Error
+
+    SessionStatusUpdate:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/SessionStatus'

@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: session-service-app
+  labels:
+    app: session-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: session-service
+  template:
+    metadata:
+      labels:
+        app: session-service
+    spec:
+      containers:
+      - name: session-service-container
+        image: awesomecosmonaut/session-service-app:latest
+        ports:
+        - containerPort: 8080

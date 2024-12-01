@@ -1,0 +1,321 @@
+openapi: 3.0.3
+info:
+  version: 1.0.0
+  title: mETaL - OpenAPI 3.0
+  description: |-
+    This is a on of mETaL's micriservices based on the OpenAPI 3.0 specification.
+
+servers:
+  - url: https://api.example.com/v1
+    description: Production server
+
+paths:
+
+  /sessions:
+    post:
+      tags:
+        - Session
+      summary: Создание новой сессии
+      description: Создаёт новую сессию обработки данных с использованием конфигурации и источников данных.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SessionCreateRequest'
+      responses:
+        '201':
+          description: Сессия успешно создана.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Session'
+        '400':
+          description: Неверные данные запроса.
+        '500':
+          description: Ошибка сервера.
+
+  /sessions/{sessionId}:
+    get:
+      tags:
+        - Session
+      summary: Получить информацию о сессии
+      description: Возвращает информацию о конкретной сессии, включая её текущий статус и параметры.
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          description: Уникальный идентификатор сессии.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Информация о сессии.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Session'
+        '404':
+          description: Сессия не найдена.
+        '500':
+          description: Ошибка сервера.
+
+    delete:
+      tags:
+        - Session
+      summary: Удалить сессию
+      description: Удаляет указанную сессию и связанные с ней данные.
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          description: Уникальный идентификатор сессии.
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Сессия успешно удалена.
+        '404':
+          description: Сессия не найдена.
+        '500':
+          description: Ошибка сервера.
+
+  /sessions/{sessionId}/status:
+    get:
+      tags:
+        - Session
+      summary: Получить статус обработки сессии
+      description: Возвращает текущий статус обработки сессии.
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          description: Уникальный идентификатор сессии.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Текущий статус обработки.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionStatus'
+        '404':
+          description: Сессия не найдена.
+        '500':
+          description: Ошибка сервера.
+
+    put:
+      tags:
+        - Session
+      summary: Обновить статус сессии
+      description: Обновляет статус обработки указанной сессии.
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          description: Уникальный идентификатор сессии.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SessionStatusUpdate'
+      responses:
+        '200':
+          description: Статус сессии успешно обновлён.
+        '400':
+          description: Неверные данные запроса.
+        '404':
+          description: Сессия не найдена.
+        '500':
+          description: Ошибка сервера.
+
+
+components:
+  schemas:
+  
+    Schema:
+      type: object
+      properties:
+        schemaId:
+          type: string
+          description: Уникальный идентификатор схемы
+        schemaName:
+          type: string
+          description: Название схемы
+        columns:
+          type: array
+          items:
+            $ref: '#/components/schemas/Column'
+
+    Column:
+      type: object
+      properties:
+        columnId:
+          type: string
+          description: Уникальный идентификатор колонки
+        columnName:
+          type: string
+          description: Название колонки
+        dataType:
+          type: string
+          description: Тип данных колонки
+          enum:
+            - Integer
+            - Float
+            - String
+        columnData:
+          type: string
+          description: Данные в колонке
+
+    DBCredential:
+      type: object
+      properties:
+        credentialId:
+          type: string
+          description: Уникальный идентификатор доступа
+        approvedUserId:
+          type: string
+          description: Идентификатор пользователя
+        expirationDate:
+          type: string
+          format: date-time
+          description: Дата истечения доступа
+          
+    ValStatusSchema:
+      type: object
+      properties:
+        name:
+           $ref: '#/components/schemas/ConfigValidationStatus'
+          
+        status_id:
+          type: string
+          format: uuid
+      
+    CreateConfig:
+      type: object
+      properties:
+        rawConfig:
+          type: string
+    Config:
+      type: object
+      properties:
+        configID:
+          type: string
+          format: uuid
+        rawConfig:
+          type: string
+        validationStatus:
+          $ref: '#/components/schemas/ConfigValidationStatus'
+        steps:
+          type: array
+          items:
+            $ref: '#/components/schemas/Step'
+
+    ConfigValidationStatus:
+      type: string
+      enum:
+        - Initial
+        - Ready
+        - Running
+        - Success
+        - Error
+
+    Step:
+      type: object
+      properties:
+        stepID:
+          type: string
+          format: uuid
+        stepName:
+          type: string
+          example: "TransformAlongCountry"
+        stepType:
+          $ref: '#/components/schemas/StepType'
+        stepDescription:
+          type: string
+        nextStepId:
+          nullable: true
+          type: string
+          format: uuid
+        prevStepId:
+          nullable: true
+          type: string
+          format: uuid
+        
+    
+    StepType:
+      type: string
+      enum:
+        - Transform
+        - Anonymize
+        - Merge
+        - Cleanse
+        - CheckQuality
+        
+    NewSessionStatusSchema:
+      description: User info for username change
+      type: object
+      required:
+        - email
+        - new_status_id
+      properties:
+        email:
+          description: Email of user
+          type: string
+          example: example@mail.ru
+        new_status_id:
+          description: New status of the session's execution
+          type: string
+          enum:
+            - Initial
+            - Ready
+            - Running
+            - Success
+            - Error
+        
+    Session:
+      type: object
+      properties:
+        sessionId:
+          type: string
+          description: Уникальный идентификатор сессии.
+        config:
+          $ref: '#/components/schemas/Config'
+        processingParameters:
+          type: object
+          additionalProperties:
+            type: string
+          description: Параметры обработки данных, связанные с сессией.
+        status:
+          $ref: '#/components/schemas/SessionStatus'
+
+    SessionCreateRequest:
+      type: object
+      properties:
+        configId:
+          type: string
+          description: Идентификатор конфигурации для сессии.
+        processingParameters:
+          type: object
+          additionalProperties:
+            type: string
+          description: Параметры обработки данных для сессии.
+
+    SessionStatus:
+      type: string
+      enum:
+        - Initial
+        - Ready
+        - Running
+        - Success
+        - Error
+
+    SessionStatusUpdate:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/SessionStatus'

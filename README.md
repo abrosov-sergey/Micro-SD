@@ -12,7 +12,7 @@ LLM prompts are here:
   
 - [Anisin Aleksandr](https://github.com/abrosov-sergey/Micro-SD/blob/main/kubernetes_app/config_service/prompts.md)
 - [Pan Zhengwu](https://github.com/abrosov-sergey/Micro-SD/blob/main/kubernetes_app/session_service/prompt.md)
-- [Lanin George]()
+- [Lanin George](https://github.com/abrosov-sergey/Micro-SD/blob/main/kubernetes_app/email_service/prompt.md)
 - [Malysh Igor](https://github.com/abrosov-sergey/Micro-SD/blob/main/kubernetes_app/dataprocessing/chatgpt_prompt.txt)
 
 

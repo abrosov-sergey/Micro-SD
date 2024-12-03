@@ -18,3 +18,9 @@ def send_notification(change_status: NewStatusSchema):
             detail="Notification could not be sended",
             status_code=422,
         )
+
+
+
+# import uvicorn
+# if __name__ == "__main__":
+#     uvicorn.run(app, host="0.0.0.0", port=8084)

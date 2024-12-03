@@ -11,7 +11,7 @@ app = FastAPI(title="Data Processor API", version="1.0.0", description="API for 
 
 
 DB_SERVICE_URL = "http://db-service-service:8080"
-DB_SERVICE_URL = "http://192.168.49.2:32020"
+# DB_SERVICE_URL = "http://192.168.49.2:32020"
 
 
 class AnonymizationType(str, Enum):
@@ -186,4 +186,4 @@ async def transform(dataset_url: str, transformation_type: TransformationType, t
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8081)
+    uvicorn.run(app, host="0.0.0.0", port=8080)

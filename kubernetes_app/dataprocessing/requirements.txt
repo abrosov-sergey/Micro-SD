@@ -3,3 +3,4 @@ SQLAlchemy==2.0.32
 uvicorn==0.32.0
 pandas==2.2.3
 python-multipart==0.0.19
+httpx==0.28.0

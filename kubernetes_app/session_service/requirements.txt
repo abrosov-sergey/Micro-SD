@@ -3,3 +3,5 @@ uvicorn
 boto3
 python-decouple
 python-multipart
+httpx
+requests

@@ -27,7 +27,7 @@ async def upload_file(file: UploadFile):
     Эндпоинт для загрузки файла в S3.
     """
     try:
-        unique_filename = f"{uuid4()}_{file.filename}"
+        unique_filename = f"{file.filename}"
         s3_client.upload_fileobj(file.file, AWS_BUCKET_NAME, unique_filename)
         file_url = f"{AWS_ENDPOINT_URL}/{AWS_BUCKET_NAME}/{unique_filename}"
         return {"message": "Файл успешно загружен!", "url": file_url}

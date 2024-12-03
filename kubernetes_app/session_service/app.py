@@ -20,6 +20,7 @@ DATAPROCESSING_SERVICE_URL = "http://dataprocessing-service:8080"
 DB_SERVICE_URL = "http://192.168.49.2:32020"
 EMAIL_SERVICE_URL = "http://192.168.49.2:30273"
 DATAPROCESSING_SERVICE_URL = "http://192.168.49.2:30908"
+DATAPROCESSING_SERVICE_URL = "http://localhost:8081"
 
 
 app = FastAPI()
@@ -37,6 +38,7 @@ class Step(BaseModel):
 
 
 class DataProcessorSession(BaseModel):
+    id: SkipJsonSchema[str] = Field(exclude=True, default=None)
     name: str
     dataset_a_download_url: str 
     dataset_b_download_url: str
@@ -69,43 +71,38 @@ db_service_client = httpx.AsyncClient(
 )  # Adjust base URL if needed
 
 
-async def upload_file_to_db_service(file_url: str):
 
-    
-    async with httpx.AsyncClient() as client:
-        try:
-            response = await client.get(file_url)
-            response.raise_for_status()  # Raise error if the request failed
+# Helper function to post dataset to URL
+async def post_dataset_to_url(file_url, file_name: str=""):
+    try:
 
-            # Save file in memory as a BytesIO object
-            file_in_memory = BytesIO(response.content)
-            file_in_memory.seek(0)  # Reset the pointer to the beginning of the file
+        async with httpx.AsyncClient() as client:
+            try:
+                response = await client.get(file_url)
+                
+                # Save file in memory as a BytesIO object
+                memory_file = BytesIO(response.content)
+                memory_file.seek(0)  # Reset the pointer to the beginning of the file
 
-            # Step 2: Prepare the file to be uploaded
-            files = {
-                "file": (f"{uuid4()}.txt", file_in_memory, "application/octet-stream")
-            }
+            except httpx.RequestError as e:
+                print(f"Error downloading or uploading the file: {e}")
+            except httpx.HTTPStatusError as e:
+                print(f"HTTP error occurred: {e}")
 
-            # Step 3: Post the file to your FastAPI server
-            upload_response = await client.post(
-                f"{DB_SERVICE_URL}/upload/", files=files
-            )
-            upload_response.raise_for_status()  # Raise error if the upload failed
 
-            # Handle the response from your FastAPI server
+        if not file_name:
+            file_name = f'{uuid4()}.csv'
 
-            dataset_url_at_s3 = await upload_response.json()
-            dataset_url_at_s3 = dataset_url_at_s3.get("url")
+        target_url = f"{DB_SERVICE_URL}/upload/"
+        async with httpx.AsyncClient() as client:
+            response = await client.post(target_url, files={"file": (f"{file_name}", memory_file, "application/octet-stream")})
+            response.raise_for_status()  # Raise exception for unsuccessful response
+            return response.json()
+    except httpx.HTTPStatusError as e:
+        raise HTTPException(status_code=e.response.status_code, detail=f"Failed to post dataset: {e.response.text}")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error posting dataset to target URL: {str(e)}")
 
-            result = upload_response.json()
-            print(f"File uploaded successfully! URL: {result['url']}")
-
-            return dataset_url_at_s3
-        except httpx.RequestError as e:
-            print(f"Error downloading or uploading the file: {e}")
-        except httpx.HTTPStatusError as e:
-            print(f"HTTP error occurred: {e}")
-        
 
 # Endpoints
 @app.post(
@@ -115,11 +112,9 @@ async def upload_file_to_db_service(file_url: str):
 )
 async def create_session(session: DataProcessorSession):
     session_id = str(uuid4())
-    session_data = DataProcessorSessionResponse(
-        id=session_id, name=session.name, steps=session.steps
-    )
-    sessions[session_id] = session_data
-    return session_data
+    session.id = session_id
+    sessions[session_id] = session
+    return session
 
 
 @app.get("/data-processor-sessions", response_model=List[DataProcessorSessionResponse])
@@ -169,8 +164,10 @@ async def start_session(sessionId: str):
     session = sessions[sessionId]
     step_results = []
 
-    dataset_a_url_s3 = upload_file_to_db_service(session.dataset_a_download_url)
-    dataset_b_url_s3 = upload_file_to_db_service(session.dataset_b_download_url)
+    dataset_a_url_s3 = await post_dataset_to_url(session.dataset_a_download_url)
+    dataset_a_url_s3 = dataset_a_url_s3.get("url")
+    dataset_b_url_s3 = await post_dataset_to_url(session.dataset_b_download_url)
+    dataset_b_url_s3 = dataset_b_url_s3.get("url")
 
     # Process each step in the session
     for step in session.steps:
@@ -178,7 +175,7 @@ async def start_session(sessionId: str):
             try:
                 # Send to the cleansing API
                 cleanse_response = await dataprocessing_client.post(
-                    "/data-processor/cleanse", files={"dataset": dataset_a_url_s3}
+                    "/data-processor/cleanse", params={"dataset": dataset_a_url_s3}
                 )
                 step_results.append(
                     {"stepType": step.stepType, "status": "Completed", "message": "okay"}
@@ -196,8 +193,8 @@ async def start_session(sessionId: str):
                 # Send to the anonymization API
                 anonymize_response = await dataprocessing_client.post(
                     "/data-processor/anonymize",
-                    files={"dataset": dataset_a_url_s3},
-                    json={
+                    params={
+                        "dataset": dataset_a_url_s3,
                         "anonymization_params": step.step_param,
                         "column_name": step.column_name,
                     },
@@ -217,9 +214,9 @@ async def start_session(sessionId: str):
 
                 # Send to the transformation API
                 transform_response = await dataprocessing_client.post(
-                    "/data-processor/transform",
-                    files={"dataset": dataset_a_url_s3},
-                    json={
+                    "/data-processor/transform",\
+                    params={
+                        "dataset": dataset_a_url_s3,
                         "transformation_type": step.step_param,
                         "transformation_column_name": step.column_name,
                     },
@@ -240,11 +237,10 @@ async def start_session(sessionId: str):
                 # Send to the merge API
                 merge_response = await dataprocessing_client.post(
                     "/data-processor/merge",
-                    files={
-                        "dataset_a": dataset_a_url_s3,
-                        "dataset_b": dataset_b_url_s3,
-                    },
-                    json={"merge_field_name": step.column_name},
+                    
+                    params={"merge_field_name": step.column_name,
+                        "dataset_a_url": dataset_a_url_s3,
+                        "dataset_b_url": dataset_b_url_s3,},
                 )
                 step_results.append(
                     {"stepType": step.stepType, "status": "Completed", "message": "okay"}
@@ -275,7 +271,7 @@ async def start_session(sessionId: str):
         f"{EMAIL_SERVICE_URL}/session/notify", data=email_notification
     )
 
-    return {"sessionId": sessionId, "stepResults": step_results}
+    return {"sessionId": sessionId, "stepResults": step_results, "resultURL": dataset_a_url_s3}
 
 
 # Run the application with: uvicorn app_name:app --reload

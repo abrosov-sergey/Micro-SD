@@ -17,10 +17,10 @@ EMAIL_SERVICE_URL = "http://email-service:8080"
 DATAPROCESSING_SERVICE_URL = "http://dataprocessing-service:8080"
 
 
-# DB_SERVICE_URL = "http://192.168.49.2:32020"
-# EMAIL_SERVICE_URL = "http://192.168.49.2:30273"
+DB_SERVICE_URL = "http://192.168.49.2:30461"
+EMAIL_SERVICE_URL = "http://192.168.49.2:31649"
 # DATAPROCESSING_SERVICE_URL = "http://192.168.49.2:30908"
-# DATAPROCESSING_SERVICE_URL = "http://localhost:8081"
+DATAPROCESSING_SERVICE_URL = "http://localhost:8081"
 
 
 app = FastAPI()
@@ -256,15 +256,15 @@ async def start_session(sessionId: str):
     if not failed_somewhere:
         email_notification = {
             "session_id": sessionId,
-            "email": f"session has been finished succesfuly: {step_results_str}",
-            "new_status_id": 0,
+            "email": "awesomecosmonaut@gmail.com",
+            "new_status_id": 4,
         }
 
     else:
         email_notification = {
             "session_id": sessionId,
             "email": "awesomecosmonaut@gmail.com",
-            "new_status_id": 0,
+            "new_status_id": 5,
         }
 
     upload_response = requests.post(

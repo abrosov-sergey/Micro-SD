@@ -3,7 +3,8 @@ import httpx
 import requests
 from io import BytesIO
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
+from pydantic.json_schema import SkipJsonSchema
 from typing import List, Optional, Dict
 from uuid import uuid4
 
@@ -16,9 +17,9 @@ EMAIL_SERVICE_URL = "http://email-service:8080"
 DATAPROCESSING_SERVICE_URL = "http://dataprocessing-service:8080"
 
 
-DB_SERVICE_URL = "http://192.168.49.2:31641"
+DB_SERVICE_URL = "http://192.168.49.2:32020"
 EMAIL_SERVICE_URL = "http://192.168.49.2:30273"
-DATAPROCESSING_SERVICE_URL = "http://192.168.49.2:32755"
+DATAPROCESSING_SERVICE_URL = "http://192.168.49.2:30908"
 
 
 app = FastAPI()
@@ -27,11 +28,9 @@ app = FastAPI()
 # Models
 class Step(BaseModel):
     stepType: str
-    nextStepID: Optional[str] = None
-    prevStepID: Optional[str] = None
 
-    dataset_a_s3_url: str
-    dataset_b_s3_url: Optional[str] = None
+    dataset_a_s3_url: SkipJsonSchema[str] = Field(exclude=True, default=None)
+    dataset_b_s3_url: SkipJsonSchema[Optional[str]] = Field(exclude=True, default=None)
 
     column_name: str
     step_param: Optional[str] = None
@@ -39,8 +38,9 @@ class Step(BaseModel):
 
 class DataProcessorSession(BaseModel):
     name: str
-    dataset_a_download_url: str
+    dataset_a_download_url: str 
     dataset_b_download_url: str
+
     steps: List[Step]
 
 
@@ -50,9 +50,6 @@ class DataProcessorSessionResponse(BaseModel):
     steps: List[Step]
 
 
-class StepEndWebhookRequest(BaseModel):
-    stepId: str
-    status: str
 
 
 # In-memory storage
@@ -184,12 +181,12 @@ async def start_session(sessionId: str):
                     "/data-processor/cleanse", files={"dataset": dataset_a_url_s3}
                 )
                 step_results.append(
-                    {"stepId": step.stepType, "status": "Completed", "message": "okay"}
+                    {"stepType": step.stepType, "status": "Completed", "message": "okay"}
                 )
 
             except Exception as e:
                 step_results.append(
-                    {"stepId": step.stepType, "status": "Error", "message": str(e)}
+                    {"stepType": step.stepType, "status": "Error", "message": str(e)}
                 )
                 failed_somewhere = True
 
@@ -206,12 +203,12 @@ async def start_session(sessionId: str):
                     },
                 )
                 step_results.append(
-                    {"stepId": step.stepType, "status": "Completed", "message": "okay"}
+                    {"stepType": step.stepType, "status": "Completed", "message": "okay"}
                 )
 
             except Exception as e:
                 step_results.append(
-                    {"stepId": step.stepType, "status": "Error", "message": str(e)}
+                    {"stepType": step.stepType, "status": "Error", "message": str(e)}
                 )
                 failed_somewhere = True
 
@@ -228,12 +225,12 @@ async def start_session(sessionId: str):
                     },
                 )
                 step_results.append(
-                    {"stepId": step.stepType, "status": "Completed", "message": "okay"}
+                    {"stepType": step.stepType, "status": "Completed", "message": "okay"}
                 )
 
             except Exception as e:
                 step_results.append(
-                    {"stepId": step.stepType, "status": "Error", "message": str(e)}
+                    {"stepType": step.stepType, "status": "Error", "message": str(e)}
                 )
                 failed_somewhere = True
 
@@ -250,12 +247,12 @@ async def start_session(sessionId: str):
                     json={"merge_field_name": step.column_name},
                 )
                 step_results.append(
-                    {"stepId": step.stepType, "status": "Completed", "message": "okay"}
+                    {"stepType": step.stepType, "status": "Completed", "message": "okay"}
                 )
 
             except Exception as e:
                 step_results.append(
-                    {"stepId": step.stepType, "status": "Error", "message": str(e)}
+                    {"stepType": step.stepType, "status": "Error", "message": str(e)}
                 )
                 failed_somewhere = True
 

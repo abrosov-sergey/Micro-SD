@@ -7,6 +7,7 @@ from pydantic import BaseModel, Field
 from pydantic.json_schema import SkipJsonSchema
 from typing import List, Optional, Dict
 from uuid import uuid4
+from enum import Enum
 
 
 dataset_a_url = "https://s666vla.storage.yandex.net/rdisk/73881565a366ba8794a2a93be0cb511773965618b089ed1c5e8f5adee6c42e1f/674f2d6f/GORH-WLDFTp3elLhwAv8recGK_lQ-p9MpCAzIZd89OUHtGCzD2nLBgYKSQW_MXxwX7yvhHLXLsH-hJm_DvUoiQ==?uid=0&filename=dataset_a.csv&disposition=attachment&hash=bJtznY6WJOocHUXbvZzVpCiaIo2LEQCmut9NNFOxT7sPxhxlAoRxPCvla96JpKV9q/J6bpmRyOJonT3VoXnDag%3D%3D&limit=0&content_type=text%2Fplain&owner_uid=1489006053&fsize=52&hid=72b8455668ee2f367d93ffcc383cb5f7&media_type=spreadsheet&tknv=v2&ts=6285fe702f9c0&s=04427bee1826d30cfbbabe42534dda3eed9408ac0153f5ec96fbd6afc4ff43ab&pb=U2FsdGVkX188ixIoil2We54HIqjCEzgr2Wn9du1jmh82LuYEQ9CdhVRaX3O2HK41WkULb52-bpooeQy-Px3y9cV8Yn7Rh-AKYD5eCPtKL5Y"
@@ -17,18 +18,25 @@ EMAIL_SERVICE_URL = "http://email-service:8080"
 DATAPROCESSING_SERVICE_URL = "http://dataprocessing-service:8080"
 
 
-DB_SERVICE_URL = "http://192.168.49.2:30461"
-EMAIL_SERVICE_URL = "http://192.168.49.2:31649"
-# DATAPROCESSING_SERVICE_URL = "http://192.168.49.2:30908"
-DATAPROCESSING_SERVICE_URL = "http://localhost:8081"
+# DB_SERVICE_URL = "http://192.168.49.2:30461"
+# EMAIL_SERVICE_URL = "http://192.168.49.2:31649"
+# # DATAPROCESSING_SERVICE_URL = "http://192.168.49.2:30908"
+# DATAPROCESSING_SERVICE_URL = "http://localhost:8081"
 
 
 app = FastAPI()
 
 
+class StepTypeEnum(Enum):
+    CLEANSING = "Cleansing"
+    ANONYMIZATION = "Anonymization"
+    TRANSFORMATION = "Transformation"
+    MERGE = "Merge"
+
+
 # Models
 class Step(BaseModel):
-    stepType: str
+    stepType: StepTypeEnum
 
     dataset_a_s3_url: SkipJsonSchema[str] = Field(exclude=True, default=None)
     dataset_b_s3_url: SkipJsonSchema[Optional[str]] = Field(exclude=True, default=None)

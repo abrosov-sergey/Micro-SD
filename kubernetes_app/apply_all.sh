@@ -1,0 +1,16 @@
+#!/bin/bash
+
+docker build -t awesomecosmonaut/config-service-app /home/oleg/Documents/Micro-SD/kubernetes_app/config_service/Dockerfile
+docker build -t awesomecosmonaut/dataprocessing-app /home/oleg/Documents/Micro-SD/kubernetes_app/dataprocessing/dockerfile
+docker build -t awesomecosmonaut/db-service-app /home/oleg/Documents/Micro-SD/kubernetes_app/db_service/Dockerfile
+docker build -t awesomecosmonaut/email-app /home/oleg/Documents/Micro-SD/kubernetes_app/email_service/Dockerfile
+docker build -t awesomecosmonaut/session-service-app /home/oleg/Documents/Micro-SD/kubernetes_app/session_service/Dockerfile
+
+kubectl delete deployments --all --all-namespaces
+kubectl delete services --all --all-namespaces
+
+kubectl apply -f config_service/deployment
+kubectl apply -f dataprocessing/deployment
+kubectl apply -f db_service/deployment
+kubectl apply -f email_service/deployment
+kubectl apply -f session_service/deployment

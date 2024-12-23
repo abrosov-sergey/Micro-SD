@@ -4,7 +4,7 @@ from mail import MailSender
 from schemas import NewStatusSchema
 
 
-app = FastAPI()
+app = FastAPI(root_path="/metal-project/email-service")
 
 
 @app.post("/session/notify")

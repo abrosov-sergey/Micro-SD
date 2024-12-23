@@ -26,7 +26,7 @@ DATAPROCESSING_SERVICE_URL = "http://dataprocessing-service:8081"
 # DB_SERVICE_URL = "http://localhost:8082"
 
 
-app = FastAPI()
+app = FastAPI(root_path="/metal-project/session-service")
 
 
 class StepTypeEnum(Enum):

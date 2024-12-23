@@ -2,7 +2,7 @@ from fastapi import FastAPI, UploadFile, HTTPException
 import yaml
 import requests
 
-app = FastAPI()
+app = FastAPI(root_path="/metal-project/config-service")
 
 # Настройки API — используем имена контейнеров
 DB_SERVICE_URL = "http://db-service-service:8082"

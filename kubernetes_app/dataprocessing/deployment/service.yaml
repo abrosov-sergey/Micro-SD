@@ -5,7 +5,7 @@ metadata:
   namespace: metal-project
 spec:
   selector:
-    app: dataprocessing
+    app: dataprocessing-service
   ports:
     - protocol: TCP
       port: 8081

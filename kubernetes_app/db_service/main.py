@@ -6,7 +6,7 @@ from botocore.exceptions import NoCredentialsError
 import os
 from uuid import uuid4
 
-app = FastAPI()
+app = FastAPI(root_path="/metal-project/db-service")
 
 # Настройка клиента S3
 AWS_ACCESS_KEY_ID = config("AWS_ACCESS_KEY_ID")

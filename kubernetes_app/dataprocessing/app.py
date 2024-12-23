@@ -9,7 +9,7 @@ from fastapi.responses import StreamingResponse
 from enum import Enum
 import uvicorn
 
-app = FastAPI(title="Data Processor API", version="1.0.0", description="API for processing datasets.")
+app = FastAPI(title="Data Processor API", version="1.0.0", description="API for processing datasets.", root_path="/metal-project/dataprocessing-service")
 
 
 DB_SERVICE_URL = "http://db-service-service:8082"

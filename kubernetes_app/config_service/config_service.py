@@ -5,8 +5,8 @@ import requests
 app = FastAPI()
 
 # Настройки API — используем имена контейнеров
-DB_SERVICE_URL = "http://db-service-service:8080"
-SESSION_SERVICE_URL = "http://session-service-service:8080/sessions"
+DB_SERVICE_URL = "http://db-service-service:8082"
+SESSION_SERVICE_URL = "http://session-service-service:8084/sessions"
 
 @app.post("/process-config/")
 async def process_config(file: UploadFile):

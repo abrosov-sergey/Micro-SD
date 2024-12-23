@@ -12,11 +12,15 @@ docker push awesomecosmonaut/db-service-app:latest
 docker push awesomecosmonaut/email-app:latest
 docker push awesomecosmonaut/session-service-app:latest 
 
-kubectl delete deployments --all --all-namespaces
-kubectl delete services --all --all-namespaces
+kubectl delete deployments --all -n metal-project
+kubectl delete services --all -n metal-project
 
-kubectl apply -f config_service/deployment
-kubectl apply -f dataprocessing/deployment
-kubectl apply -f db_service/deployment
-kubectl apply -f email_service/deployment
-kubectl apply -f session_service/deployment
+kubectl apply -f config_service/deployment -n metal-project
+kubectl apply -f dataprocessing/deployment -n metal-project
+kubectl apply -f db_service/deployment -n metal-project
+kubectl apply -f email_service/deployment -n metal-project
+kubectl apply -f session_service/deployment -n metal-project
+
+
+
+# kubectl apply -f network-policy.yaml -n metal-project

@@ -12,7 +12,7 @@ RUN pip install --no-cache-dir --upgrade pip && \
 pip install --no-cache-dir -r requirements.txt
 
 # Открываем порт
-EXPOSE 8001
+EXPOSE 8080
 
 # Команда запуска приложения
 CMD ["uvicorn", "config_service:app", "--host", "0.0.0.0", "--port", "8080"]

@@ -13,15 +13,17 @@ from enum import Enum
 dataset_a_url = "https://storage.yandexcloud.net/s3-asd-hse/dataset_a.csv"
 dataset_b_url = "https://storage.yandexcloud.net/s3-asd-hse/dataset_b.csv"
 
-DB_SERVICE_URL = "http://db-service-service:8080"
-EMAIL_SERVICE_URL = "http://email-service:8080"
-DATAPROCESSING_SERVICE_URL = "http://dataprocessing-service:8080"
+DB_SERVICE_URL = "http://db-service-service:8082"
+EMAIL_SERVICE_URL = "http://email-service:8083"
+DATAPROCESSING_SERVICE_URL = "http://dataprocessing-service:8081"
 
 
-DB_SERVICE_URL = "http://192.168.49.2:31289"
-EMAIL_SERVICE_URL = "http://192.168.49.2:31243"
-DATAPROCESSING_SERVICE_URL = "http://192.168.49.2:30781"
-# DATAPROCESSING_SERVICE_URL = "http://localhost:8081"
+# DB_SERVICE_URL = "http://192.168.49.2:30612"
+# EMAIL_SERVICE_URL = "http://192.168.49.2:31445"
+# DATAPROCESSING_SERVICE_URL = "http://192.168.49.2:30698"
+# DATAPROCESSING_SERVICE_URL = "http://localhost:8080"
+# EMAIL_SERVICE_URL = "http://localhost:8084"
+# DB_SERVICE_URL = "http://localhost:8082"
 
 
 app = FastAPI()
@@ -97,7 +99,7 @@ async def post_dataset_to_url(file_url, file_name: str=""):
                 raise HTTPException(status_code=500, detail=f"Error downloading or uploading the file: {e}")
 
             except httpx.HTTPStatusError as e:
-                raise HTTPException(status_code=500, detail=f"HTTP error occurred: {e}")
+                raise HTTPException(status_code=500, detail=f"HTTP error occurred during getting dataset: {e}")
 
 
         try:
@@ -107,12 +109,12 @@ async def post_dataset_to_url(file_url, file_name: str=""):
             target_url = f"{DB_SERVICE_URL}/upload/"
             
             async with httpx.AsyncClient() as client:
-                response = await client.post(target_url, files={"file": (f"{file_name}", memory_file, "application/octet-stream")}, timeout=None)
+                response = await client.post(target_url, files={"file": (f"{file_name}", memory_file, "application/octet-stream")}, timeout=9999)
                 
                 response.raise_for_status()  # Raise exception for unsuccessful response
                 return response.json()
         except Exception as e:
-            raise HTTPException(status_code=500, detail=f" error occurred: {e}")
+            raise HTTPException(status_code=500, detail=f" error occurred during post dataset: {e}")
 
     # except httpx.HTTPStatusError as e:
     #     raise HTTPException(status_code=e.response.status_code, detail=f"Failed to post dataset: {e.response.text}")
@@ -297,4 +299,4 @@ async def start_session(sessionId: str):
 # Run the application with: uvicorn app_name:app --reload
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8080)
+    uvicorn.run(app, host="0.0.0.0", port=8084)

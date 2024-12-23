@@ -12,10 +12,9 @@ import uvicorn
 app = FastAPI(title="Data Processor API", version="1.0.0", description="API for processing datasets.")
 
 
-# DB_SERVICE_URL = "http://db-service-service:8080"
-# DB_SERVICE_URL = "http://192.168.49.2:32020"
-
-DB_SERVICE_URL = "http://192.168.49.2:31289"
+DB_SERVICE_URL = "http://db-service-service:8082"
+# DB_SERVICE_URL = "http://192.168.49.2:32088"
+# DB_SERVICE_URL = "http://localhost:8082"
 
 class AnonymizationType(str, Enum):
     HideEMail = "HideEMail"

@@ -1,3 +1,5 @@
+import random
+import re
 import httpx
 import pandas as pd
 from io import BytesIO
@@ -7,12 +9,12 @@ from fastapi.responses import StreamingResponse
 from enum import Enum
 import uvicorn
 
-app = FastAPI(title="Data Processor API", version="1.0.0", description="API for processing datasets.")
+app = FastAPI(title="Data Processor API", version="1.0.0", description="API for processing datasets.", root_path="/metal-project/dataprocessing-service")
 
 
-DB_SERVICE_URL = "http://db-service-service:8080"
-# DB_SERVICE_URL = "http://192.168.49.2:32020"
-
+DB_SERVICE_URL = "http://db-service-service:8082"
+# DB_SERVICE_URL = "http://192.168.49.2:32088"
+# DB_SERVICE_URL = "http://localhost:8082"
 
 class AnonymizationType(str, Enum):
     HideEMail = "HideEMail"
@@ -57,7 +59,7 @@ async def post_dataset_to_url(df: pd.DataFrame, file_name: str, file_format: str
     try:
         target_url = f"{DB_SERVICE_URL}/upload/"
         async with httpx.AsyncClient() as client:
-            response = await client.post(target_url, files={"file": (f"{file_name}", memory_file, "application/octet-stream")})
+            response = await client.post(target_url, files={"file": (f"{file_name}", memory_file, "application/octet-stream")}, timeout=None)
             response.raise_for_status()  # Raise exception for unsuccessful response
             return response.json()
     except httpx.HTTPStatusError as e:
@@ -123,20 +125,54 @@ async def anonymize(dataset_url: str, anonymization_params: AnonymizationType, c
         df = await download_dataset(dataset_url)
 
         # Check if the specified column exists
-        if column_name not in df.columns:
-            raise HTTPException(status_code=400, detail=f"Column '{column_name}' not found in the dataset.")
-
-        # Apply anonymization based on the specified type
         if anonymization_params == AnonymizationType.HideEMail:
             # Mask email addresses
-            df[column_name] = df[column_name].replace(
-                to_replace=r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}", 
-                value="hidden@example.com", 
-                regex=True
+            email_pattern = r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}"
+
+            # Replace email addresses in the specified column
+            df[column_name] = df[column_name].apply(
+                lambda x: re.sub(email_pattern, "*", x) if pd.notnull(x) else x
             )
+            
         elif anonymization_params == AnonymizationType.HideRandomSymbols:
             # Replace non-alphanumeric characters with "*"
-            df[column_name] = df[column_name].replace(to_replace=r"[^\w\s]", value="*", regex=True)
+            
+            def replace_random_symbols(input_string: str, mask_char: str = "*") -> str:
+                """
+                Replace a random number of random characters in the string with the mask character.
+
+                Args:
+                    input_string (str): The input string to modify.
+                    mask_char (str): The character to replace symbols with. Defaults to '*'.
+
+                Returns:
+                    str: The modified string with random symbols replaced.
+                """
+                if not input_string:
+                    return input_string  # Return as is if the string is empty or None
+
+                # Convert string to a list for mutable operations
+                char_list = list(input_string)
+
+                # Generate a random number of replacements (1 to len(input_string))
+                num_replacements = random.randint(1, len(input_string))
+
+                # Randomly select positions to replace
+                positions_to_replace = random.sample(range(len(input_string)), num_replacements)
+
+                # Replace the characters at the selected positions with the mask character
+                for pos in positions_to_replace:
+                    char_list[pos] = mask_char
+
+                return ''.join(char_list)
+
+            # Apply the replacement function to the specified column
+            df[column_name] = df[column_name].apply(replace_random_symbols)
+        elif anonymization_params == AnonymizationType.ApplyHash:
+            # Apply a simple hash anonymization
+            df[column_name] = df[column_name].apply(lambda x: str(hash(x)) if pd.notnull(x) else x)
+        else:
+            raise HTTPException(status_code=400, detail="Unsupported anonymization type.")
 
         # Post the anonymized data to the target URL
         post_response = await post_dataset_to_url(df, dataset_url.split('/')[-1])
@@ -186,4 +222,4 @@ async def transform(dataset_url: str, transformation_type: TransformationType, t
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8080)
+    uvicorn.run(app, host="0.0.0.0", port=8081)

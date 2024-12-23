@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: config-service-service
+  namespace: metal-project
 spec:
   selector:
     app: config-service
@@ -9,4 +10,4 @@ spec:
     - protocol: TCP
       port: 8080
       targetPort: 8080
-  type: NodePort
+  type: ClusterIP

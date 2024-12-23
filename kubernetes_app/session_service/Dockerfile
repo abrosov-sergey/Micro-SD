@@ -14,6 +14,6 @@ COPY . /code/
 
 COPY ./launch_app_w_migrations.sh /launch_app_w_migrations.sh
 
-EXPOSE 8080
+EXPOSE 8084
 
 ENTRYPOINT ["sh", "/launch_app_w_migrations.sh"]

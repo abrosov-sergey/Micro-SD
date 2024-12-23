@@ -19,3 +19,10 @@ spec:
         image: awesomecosmonaut/config-service-app:latest
         ports:
         - containerPort: 8080
+        resources:
+          requests:
+            memory: "100Mi"
+            cpu: "200m"
+          limits:
+            memory: "128Mi"
+            cpu: "250m"

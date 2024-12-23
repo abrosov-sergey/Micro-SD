@@ -6,7 +6,7 @@ from botocore.exceptions import NoCredentialsError
 import os
 from uuid import uuid4
 
-app = FastAPI()
+app = FastAPI(root_path="/metal-project/db-service")
 
 # Настройка клиента S3
 AWS_ACCESS_KEY_ID = config("AWS_ACCESS_KEY_ID")
@@ -71,3 +71,7 @@ async def serve_file(file_name: str):
         return FileResponse(file_path, media_type="application/octet-stream", filename=file_name)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+# import uvicorn
+# if __name__ == "__main__":
+#     uvicorn.run(app, host="0.0.0.0", port=8082)

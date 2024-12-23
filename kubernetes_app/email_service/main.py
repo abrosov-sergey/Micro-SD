@@ -4,7 +4,7 @@ from mail import MailSender
 from schemas import NewStatusSchema
 
 
-app = FastAPI()
+app = FastAPI(root_path="/metal-project/email-service")
 
 
 @app.post("/session/notify")
@@ -23,4 +23,4 @@ def send_notification(change_status: NewStatusSchema):
 
 # import uvicorn
 # if __name__ == "__main__":
-#     uvicorn.run(app, host="0.0.0.0", port=8084)
+#     uvicorn.run(app, host="0.0.0.0", port=8083)

@@ -2,11 +2,11 @@ from fastapi import FastAPI, UploadFile, HTTPException
 import yaml
 import requests
 
-app = FastAPI()
+app = FastAPI(root_path="/metal-project/config-service")
 
 # Настройки API — используем имена контейнеров
-DB_SERVICE_URL = "http://db-service:8000"
-SESSION_SERVICE_URL = "http://session-service:8080/sessions"
+DB_SERVICE_URL = "http://db-service-service:8082"
+SESSION_SERVICE_URL = "http://session-service-service:8084/sessions"
 
 @app.post("/process-config/")
 async def process_config(file: UploadFile):

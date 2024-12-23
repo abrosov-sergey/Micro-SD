@@ -7,28 +7,38 @@ from pydantic import BaseModel, Field
 from pydantic.json_schema import SkipJsonSchema
 from typing import List, Optional, Dict
 from uuid import uuid4
+from enum import Enum
 
 
-dataset_a_url = "https://s666vla.storage.yandex.net/rdisk/73881565a366ba8794a2a93be0cb511773965618b089ed1c5e8f5adee6c42e1f/674f2d6f/GORH-WLDFTp3elLhwAv8recGK_lQ-p9MpCAzIZd89OUHtGCzD2nLBgYKSQW_MXxwX7yvhHLXLsH-hJm_DvUoiQ==?uid=0&filename=dataset_a.csv&disposition=attachment&hash=bJtznY6WJOocHUXbvZzVpCiaIo2LEQCmut9NNFOxT7sPxhxlAoRxPCvla96JpKV9q/J6bpmRyOJonT3VoXnDag%3D%3D&limit=0&content_type=text%2Fplain&owner_uid=1489006053&fsize=52&hid=72b8455668ee2f367d93ffcc383cb5f7&media_type=spreadsheet&tknv=v2&ts=6285fe702f9c0&s=04427bee1826d30cfbbabe42534dda3eed9408ac0153f5ec96fbd6afc4ff43ab&pb=U2FsdGVkX188ixIoil2We54HIqjCEzgr2Wn9du1jmh82LuYEQ9CdhVRaX3O2HK41WkULb52-bpooeQy-Px3y9cV8Yn7Rh-AKYD5eCPtKL5Y"
-dataset_b_url = "https://s50vlx.storage.yandex.net/rdisk/e4e0699f65100fc7dffc7a47e0560337369fef20b212d9f59fdcd142a3aef56c/674f2e83/GORH-WLDFTp3elLhwAv8rQmlKbLQHYt1UW7_-y6QksNtf7YILfar6sFVC7XWPuFsTuZn9j8OdKgMdnjqsMJKWg==?uid=0&filename=dataset_b.csv&disposition=attachment&hash=kUOS5fDnBXOdl8JdecnPw0KicRXsG/1Qink7LW6ZKeVPohlEfEPxnWItCS%2BfDnIpq/J6bpmRyOJonT3VoXnDag%3D%3D&limit=0&content_type=text%2Fplain&owner_uid=1489006053&fsize=85&hid=dbb3ca65a882e72e6c1ca8295aa9497d&media_type=spreadsheet&tknv=v2&ts=6285ff77666c0&s=2953d76e1644fd9afaac04b081b33763b01c1285d512005e80b0c6125213726f&pb=U2FsdGVkX1-4yacjNiy0K5l_GaiwTeF6Q80AqyZtMK7AIdSd68iheXW3kdT-KOajidIvuy19NH04U8lk5uCS0D1J4uE0pTvklaOusDXZFwc"
+dataset_a_url = "https://storage.yandexcloud.net/s3-asd-hse/dataset_a.csv"
+dataset_b_url = "https://storage.yandexcloud.net/s3-asd-hse/dataset_b.csv"
 
-DB_SERVICE_URL = "http://db-service-service:8080"
-EMAIL_SERVICE_URL = "http://email-service:8080"
-DATAPROCESSING_SERVICE_URL = "http://dataprocessing-service:8080"
-
-
-DB_SERVICE_URL = "http://192.168.49.2:30461"
-EMAIL_SERVICE_URL = "http://192.168.49.2:31649"
-# DATAPROCESSING_SERVICE_URL = "http://192.168.49.2:30908"
-DATAPROCESSING_SERVICE_URL = "http://localhost:8081"
+DB_SERVICE_URL = "http://db-service-service:8082"
+EMAIL_SERVICE_URL = "http://email-service:8083"
+DATAPROCESSING_SERVICE_URL = "http://dataprocessing-service:8081"
 
 
-app = FastAPI()
+# DB_SERVICE_URL = "http://192.168.49.2:30612"
+# EMAIL_SERVICE_URL = "http://192.168.49.2:31445"
+# DATAPROCESSING_SERVICE_URL = "http://192.168.49.2:30698"
+# DATAPROCESSING_SERVICE_URL = "http://localhost:8080"
+# EMAIL_SERVICE_URL = "http://localhost:8084"
+# DB_SERVICE_URL = "http://localhost:8082"
+
+
+app = FastAPI(root_path="/metal-project/session-service")
+
+
+class StepTypeEnum(Enum):
+    CLEANSING = "Cleansing"
+    ANONYMIZATION = "Anonymization"
+    TRANSFORMATION = "Transformation"
+    MERGE = "Merge"
 
 
 # Models
 class Step(BaseModel):
-    stepType: str
+    stepType: StepTypeEnum
 
     dataset_a_s3_url: SkipJsonSchema[str] = Field(exclude=True, default=None)
     dataset_b_s3_url: SkipJsonSchema[Optional[str]] = Field(exclude=True, default=None)
@@ -74,7 +84,7 @@ db_service_client = httpx.AsyncClient(
 
 # Helper function to post dataset to URL
 async def post_dataset_to_url(file_url, file_name: str=""):
-    try:
+    # try:
 
         async with httpx.AsyncClient() as client:
             try:
@@ -86,22 +96,30 @@ async def post_dataset_to_url(file_url, file_name: str=""):
 
             except httpx.RequestError as e:
                 print(f"Error downloading or uploading the file: {e}")
+                raise HTTPException(status_code=500, detail=f"Error downloading or uploading the file: {e}")
+
             except httpx.HTTPStatusError as e:
-                print(f"HTTP error occurred: {e}")
+                raise HTTPException(status_code=500, detail=f"HTTP error occurred during getting dataset: {e}")
 
 
-        if not file_name:
-            file_name = f'{uuid4()}.csv'
+        try:
+            if not file_name:
+                file_name = f'{uuid4()}.csv'
 
-        target_url = f"{DB_SERVICE_URL}/upload/"
-        async with httpx.AsyncClient() as client:
-            response = await client.post(target_url, files={"file": (f"{file_name}", memory_file, "application/octet-stream")})
-            response.raise_for_status()  # Raise exception for unsuccessful response
-            return response.json()
-    except httpx.HTTPStatusError as e:
-        raise HTTPException(status_code=e.response.status_code, detail=f"Failed to post dataset: {e.response.text}")
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error posting dataset to target URL: {str(e)}")
+            target_url = f"{DB_SERVICE_URL}/upload/"
+            
+            async with httpx.AsyncClient() as client:
+                response = await client.post(target_url, files={"file": (f"{file_name}", memory_file, "application/octet-stream")}, timeout=9999)
+                
+                response.raise_for_status()  # Raise exception for unsuccessful response
+                return response.json()
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f" error occurred during post dataset: {e}")
+
+    # except httpx.HTTPStatusError as e:
+    #     raise HTTPException(status_code=e.response.status_code, detail=f"Failed to post dataset: {e.response.text}")
+    # except Exception as e:
+    #     raise HTTPException(status_code=500, detail=f"Error posting dataset to target URL: {str(e)}")
 
 
 # Endpoints
@@ -109,6 +127,7 @@ async def post_dataset_to_url(file_url, file_name: str=""):
     "/data-processor-sessions",
     response_model=DataProcessorSessionResponse,
     status_code=201,
+    
 )
 async def create_session(session: DataProcessorSession):
     session_id = str(uuid4())
@@ -171,11 +190,11 @@ async def start_session(sessionId: str):
 
     # Process each step in the session
     for step in session.steps:
-        if step.stepType == "Cleansing":
+        if step.stepType.value == "Cleansing":
             try:
                 # Send to the cleansing API
                 cleanse_response = await dataprocessing_client.post(
-                    "/data-processor/cleanse", params={"dataset": dataset_a_url_s3}
+                    "/data-processor/cleanse", params={"dataset": dataset_a_url_s3}, timeout=None
                 )
                 step_results.append(
                     {"stepType": step.stepType, "status": "Completed", "message": "okay"}
@@ -187,7 +206,7 @@ async def start_session(sessionId: str):
                 )
                 failed_somewhere = True
 
-        elif step.stepType == "Anonymization":
+        elif step.stepType.value == "Anonymization":
             try:
 
                 # Send to the anonymization API
@@ -198,6 +217,7 @@ async def start_session(sessionId: str):
                         "anonymization_params": step.step_param,
                         "column_name": step.column_name,
                     },
+                    timeout=None
                 )
                 step_results.append(
                     {"stepType": step.stepType, "status": "Completed", "message": "okay"}
@@ -209,7 +229,7 @@ async def start_session(sessionId: str):
                 )
                 failed_somewhere = True
 
-        elif step.stepType == "Transformation":
+        elif step.stepType.value == "Transformation":
             try:
 
                 # Send to the transformation API
@@ -220,6 +240,7 @@ async def start_session(sessionId: str):
                         "transformation_type": step.step_param,
                         "transformation_column_name": step.column_name,
                     },
+                    timeout=None
                 )
                 step_results.append(
                     {"stepType": step.stepType, "status": "Completed", "message": "okay"}
@@ -231,7 +252,7 @@ async def start_session(sessionId: str):
                 )
                 failed_somewhere = True
 
-        elif step.stepType == "Merge":
+        elif step.stepType.value == "Merge":
             try:
 
                 # Send to the merge API
@@ -241,6 +262,7 @@ async def start_session(sessionId: str):
                     params={"merge_field_name": step.column_name,
                         "dataset_a_url": dataset_a_url_s3,
                         "dataset_b_url": dataset_b_url_s3,},
+                    timeout=None
                 )
                 step_results.append(
                     {"stepType": step.stepType, "status": "Completed", "message": "okay"}
@@ -268,7 +290,7 @@ async def start_session(sessionId: str):
         }
 
     upload_response = requests.post(
-        f"{EMAIL_SERVICE_URL}/session/notify", data=email_notification
+        f"{EMAIL_SERVICE_URL}/session/notify", data=email_notification, timeout=None
     )
 
     return {"sessionId": sessionId, "stepResults": step_results, "resultURL": dataset_a_url_s3}
@@ -277,4 +299,4 @@ async def start_session(sessionId: str):
 # Run the application with: uvicorn app_name:app --reload
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8080)
+    uvicorn.run(app, host="0.0.0.0", port=8084)

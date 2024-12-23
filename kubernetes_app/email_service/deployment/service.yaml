@@ -1,12 +1,14 @@
+
 apiVersion: v1
 kind: Service
 metadata:
   name: email-service
+  namespace: metal-project
 spec:
   selector:
-    app: email
+    app: email-service
   ports:
     - protocol: TCP
-      port: 8080
-      targetPort: 8080
-  type: NodePort
+      port: 8083
+      targetPort: 8083
+  type: ClusterIP

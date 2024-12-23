@@ -1,21 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: dataprocessing-app
+  name: dataprocessing-service
   labels:
-    app: dataprocessing
+    app: dataprocessing-service
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: dataprocessing
+      app: dataprocessing-service
   template:
     metadata:
       labels:
-        app: dataprocessing
+        app: dataprocessing-service
     spec:
       containers:
       - name: dataprocessing-container
         image: awesomecosmonaut/dataprocessing-app:latest
         ports:
-        - containerPort: 8080
+        - containerPort: 8081
+        resources:
+          requests:
+            memory: "100Mi"
+            cpu: "200m"
+          limits:
+            memory: "128Mi"
+            cpu: "250m"

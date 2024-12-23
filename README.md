@@ -1,12 +1,25 @@
 # mETaL
 
+## About Final Task, Part 2
+
+Link to the video: [Yandex Disk](https://disk.yandex.ru/client/disk?idApp=client&dialog=slider&idDialog=/disk/ASD%20-%20HD%201080p.mov) or [YouTube](https://www.youtube.com/watch?v=7ufnB736O4A)
+
+Use Cases and Timecodes:
+
+- Upload Config .yaml - 10:25
+- Manipulate with data (e.g., merge) - 11:00
+- Read from DB (reading from S3 to merge files) - 11:00
+- Write to DB (writing changes to YC S3) - 11:15
+- View the data result - 11:30
+- Get a notification with pipeline status - 13:10
+
 ## Hackaton Info
 
 Our team chose FastAPI and Python for its efficiency, scalability, and developer-friendly design. FastAPI offers asynchronous request handling for high performance, automatic Swagger documentation, and robust type-checking using Python’s type hints.
 
 All our microservices are stateless.
 
-Files for 2-nd part of the Hackatone are located in [**kubernetes_app**](https://github.com/abrosov-sergey/Micro-SD/tree/main/kubernetes_app) folder. Files for 1-st part of the Hackatone are located in [**/hackaton/task1/**](https://github.com/abrosov-sergey/Micro-SD/tree/main/hackaton/task1).
+Files for 2-nd part of the Hackaton are located in [**kubernetes_app**](https://github.com/abrosov-sergey/Micro-SD/tree/main/kubernetes_app) folder. Files for 1-st part of the Hackaton are located in [**/hackaton/task1/**](https://github.com/abrosov-sergey/Micro-SD/tree/main/hackaton/task1).
 
 LLM prompts are as follows:
   
@@ -23,7 +36,7 @@ LLM prompts are as follows:
 - **glossary.md** – a glossary explaining key terms and abbreviations used in the project, facilitating the understanding of specific terminology.
 - **interactionAnalysis.md** – an interaction analysis describing system and user behaviors, including key usage scenarios.
 - **personas.md** – a description of target users, their needs, and behaviors, which assists in developing functional requirements and design.
-- **classDiagramm** – a file containing a class diagram, which displays the architecture and relationships between classes in the project.
+- **classDiagram** – a file containing a class diagram, which displays the architecture and relationships between classes in the project.
 - **useCases** – a document describing use cases, including user interaction scenarios with the system to perform tasks.
 - **classCandidates.md** – potential classes needed for implementation.
 - **JTBD.png** – an image illustrating the "Jobs To Be Done" (JTBD) concept aimed at understanding users tasks.
@@ -32,25 +45,25 @@ LLM prompts are as follows:
 
 ## Team
 
-Name: Micro SD<br/>
-Group: МСПИН241<br/>
+Name: Micro SD; Group: МСПИН241
+
 Members:
 
-   * Abrosov Sergey  
-   * Anisin Aleksandr  
-   * Lanin George  
-   * Malysh Igor  
-   * Pan Zhengwu
+- Abrosov Sergey  
+- Anisin Aleksandr  
+- Lanin George  
+- Malysh Igor  
+- Pan Zhengwu
 
 ## Tasks Links
 
-Task №3: https://docs.google.com/presentation/d/1FlMaD3UYV3isiqQ4khlfJ4fg2SOmUeGApOc7ZTPYI9U/edit?usp=sharing
+Task №3: <https://docs.google.com/presentation/d/1FlMaD3UYV3isiqQ4khlfJ4fg2SOmUeGApOc7ZTPYI9U/edit?usp=sharing>
 
-Task №4: https://docs.google.com/document/d/1ilmZWZ4-yEUfUanzLw11iRW2gQ4b2FEnqN64QAGmVkU/edit?usp=sharing
+Task №4: <https://docs.google.com/document/d/1ilmZWZ4-yEUfUanzLw11iRW2gQ4b2FEnqN64QAGmVkU/edit?usp=sharing>
 
-Presentation of Task №5: https://docs.google.com/presentation/d/1qOqScX0XhQLIA76nCZpglLcfXFSS5KNsb52CblAUeOU/edit?usp=sharing
-README for Task №5: https://github.com/abrosov-sergey/Micro-SD/blob/main/Tasks/task5/README.md
+Presentation of Task №5: <https://docs.google.com/presentation/d/1qOqScX0XhQLIA76nCZpglLcfXFSS5KNsb52CblAUeOU/edit?usp=sharing>
+README for Task №5: <https://github.com/abrosov-sergey/Micro-SD/blob/main/Tasks/task5/README.md>
 
-Task №6: https://docs.google.com/presentation/d/1QtxlXbBMxnn4ROjWFLXMk7tnZJf2igzeF_HVogJMF5I/edit?usp=sharing
+Task №6: <https://docs.google.com/presentation/d/1QtxlXbBMxnn4ROjWFLXMk7tnZJf2igzeF_HVogJMF5I/edit?usp=sharing>
 
-Task №7: https://docs.google.com/document/d/1lAQyUi0QRgM_REJKVpOWj-xhgOhObnBxBWDBlDgbzZE/edit?usp=sharing
+Task №7: <https://docs.google.com/document/d/1lAQyUi0QRgM_REJKVpOWj-xhgOhObnBxBWDBlDgbzZE/edit?usp=sharing>
